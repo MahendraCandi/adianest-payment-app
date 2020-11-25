@@ -43,8 +43,9 @@ public class TransaksiServiceImpl implements ITransaksiService {
         KategoriTransaksi kategori = kategoriTransaksiDao.findById(kategoriTransaksi).orElseThrow(NullPointerException::new);
         String prefix = kategori.getPrefix();
 
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("ddMMyyHHmm");
-        String date = LocalDateTime.now().format(dtf);
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("ddMMyyHH");
+        LocalDateTime now = LocalDateTime.now();
+        String date = now.format(dtf);
 
         Transaksi transaksi = transaksiDao.findTopByIdStartsWithOrderByIdDesc(prefix).orElse(null);
 
@@ -53,9 +54,16 @@ public class TransaksiServiceImpl implements ITransaksiService {
             formatId = prefix + date + "001";
         } else {
             String idTransaksi = transaksi.getId();
-            String lastRow = idTransaksi.substring(idTransaksi.length() - 3);
-            Integer row = Integer.valueOf(lastRow);
-            row++;
+            String dateTimePrevious = idTransaksi.substring(idTransaksi.length() - 11, idTransaksi.length() - 3);
+            LocalDateTime previous = LocalDateTime.parse(dateTimePrevious, dtf);
+
+            int row = 1;
+            if (now.isEqual(previous)) {
+                String lastRow = idTransaksi.substring(idTransaksi.length() - 3);
+                row = Integer.valueOf(lastRow);
+                row++;
+            }
+
             formatId = prefix + date + String.format("%03d", row);
 
         }

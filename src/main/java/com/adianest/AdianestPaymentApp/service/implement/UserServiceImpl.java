@@ -80,6 +80,26 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
+    public UserDto getOneUserByNoTelpon(String noTelpon) {
+        List<Object[]> objects = userDao.findUserAndAuthoritiesByNoTelpon(noTelpon);
+        UserDto userDto = null;
+        if (!objects.isEmpty()) {
+            for (Object[] obj : objects) {
+                userDto = new UserDto();
+                userDto.setIdUser(obj[0].toString());
+                userDto.setNoTelpon(obj[1].toString());
+                userDto.setEmailUser(obj[2].toString());
+                userDto.setNameUser(obj[3].toString());
+                userDto.setIdAuthorities(Integer.valueOf(obj[4].toString()));
+                userDto.setNameAuthorities(obj[5].toString());
+                userDto.setPasswordUser(obj[6].toString());
+            }
+        }
+
+        return userDto;
+    }
+
+    @Override
     public List<UserDto> getAllUsers() {
 
         List<Object[]> objects = userDao.findAllUsersWithAuthorities();

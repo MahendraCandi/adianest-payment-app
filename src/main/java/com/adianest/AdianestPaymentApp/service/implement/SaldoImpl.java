@@ -5,6 +5,7 @@
 package com.adianest.AdianestPaymentApp.service.implement;
 
 import com.adianest.AdianestPaymentApp.dao.SaldoDao;
+import com.adianest.AdianestPaymentApp.dto.SaldoDto;
 import com.adianest.AdianestPaymentApp.model.Saldo;
 import com.adianest.AdianestPaymentApp.service.ISaldo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,5 +43,14 @@ public class SaldoImpl implements ISaldo {
     @Override
     public Saldo getEndingBalanceByUserId(String userId) {
         return saldoDao.findTopByUserIdOrderByTglMutasiDesc(userId).orElseThrow(NullPointerException::new);
+    }
+
+    @Override
+    public SaldoDto getEndingBalanceByUserIdAsDto(String userId) {
+        Saldo saldo = saldoDao.findTopByUserIdOrderByTglMutasiDesc(userId).orElseThrow(NullPointerException::new);
+        SaldoDto dto = new SaldoDto();
+        dto.setUserId(saldo.getUserId());
+        dto.setEndingBalance(saldo.getSaldoAkhir().toString());
+        return dto;
     }
 }

@@ -41,6 +41,25 @@ public interface UserDao extends JpaRepository<User, String> {
                     "   A.email AS EMAIL, " +
                     "   A.nama_lengkap AS NAMA_LENGKAP, " +
                     "   C.id AS AUTHORITIES_ID, " +
+                    "   C.nama AS AUTHORITIES_NAME, " +
+                    "   A.password AS PASSWORD " +
+                    "FROM " +
+                    "   USER A " +
+                    "LEFT JOIN USER_AUTHORITIES B ON A.id = B.user_id " +
+                    "JOIN AUTHORITIES C ON B.authorities_id = C.id " +
+                    "WHERE " +
+                    "   A.no_telpon = :no_telpon",
+            nativeQuery = true
+    )
+    List<Object[]> findUserAndAuthoritiesByNoTelpon(@Param("no_telpon") String noTelpon);
+
+    @Query(
+            value = "SELECT " +
+                    "   A.id AS USER_ID, " +
+                    "   A.no_telpon AS NO_TELPON, " +
+                    "   A.email AS EMAIL, " +
+                    "   A.nama_lengkap AS NAMA_LENGKAP, " +
+                    "   C.id AS AUTHORITIES_ID, " +
                     "   C.nama AS AUTHORITIES_NAME " +
                     "FROM " +
                     "   USER A " +
@@ -51,5 +70,4 @@ public interface UserDao extends JpaRepository<User, String> {
     List<Object[]> findAllUsersWithAuthorities();
 
     Optional<User> findTopByOrderById();
-
 }

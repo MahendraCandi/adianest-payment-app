@@ -50,6 +50,8 @@ class AdianestPaymentAppApplicationTests {
 
         String idTransaksi = "PULSA" + date + "001";
         String lastRow = idTransaksi.substring(idTransaksi.length() - 3);
+        String dateTimePrevious = idTransaksi.substring(idTransaksi.length() - 13, idTransaksi.length() - 3);
+        System.out.println("dateTimePrevious: " + dateTimePrevious);
         System.out.println(lastRow);
 
         System.out.println(String.format("%03d", 30));
@@ -57,17 +59,17 @@ class AdianestPaymentAppApplicationTests {
 //        String idTrans = transaksiService.getFormatIdTransaksi("TOP_UP");
 //        System.out.println(idTrans);
 
-        System.out.println("082178901234".substring(1));
-
-        Saldo saldo = saldoService.getEndingBalanceByUserId("user-001");
-        try {
-            System.out.println(new ObjectMapper().writeValueAsString(saldo));
-            BigDecimal amount = new BigDecimal("-100000000").setScale(2, BigDecimal.ROUND_CEILING);
-            BigDecimal amountFirst = new BigDecimal("100000000").setScale(2, BigDecimal.ROUND_CEILING);
-            System.out.println(amountFirst.add(amount));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        System.out.println("082178901234".substring(1));
+//
+//        Saldo saldo = saldoService.getEndingBalanceByUserId("user-001");
+//        try {
+//            System.out.println(new ObjectMapper().writeValueAsString(saldo));
+//            BigDecimal amount = new BigDecimal("-100000000").setScale(2, BigDecimal.ROUND_CEILING);
+//            BigDecimal amountFirst = new BigDecimal("100000000").setScale(2, BigDecimal.ROUND_CEILING);
+//            System.out.println(amountFirst.add(amount));
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
 
 
     }

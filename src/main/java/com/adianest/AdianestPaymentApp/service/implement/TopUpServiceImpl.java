@@ -6,10 +6,9 @@ package com.adianest.AdianestPaymentApp.service.implement;
 
 import com.adianest.AdianestPaymentApp.dao.KategoriTopUpDao;
 import com.adianest.AdianestPaymentApp.dao.TopUpDao;
+import com.adianest.AdianestPaymentApp.dao.TransaksiTopUpConfirmDao;
 import com.adianest.AdianestPaymentApp.dto.TopUpDto;
-import com.adianest.AdianestPaymentApp.model.KategoriTopUp;
-import com.adianest.AdianestPaymentApp.model.Saldo;
-import com.adianest.AdianestPaymentApp.model.TransaksiTopup;
+import com.adianest.AdianestPaymentApp.model.*;
 import com.adianest.AdianestPaymentApp.service.ISaldo;
 import com.adianest.AdianestPaymentApp.service.ITopUpService;
 import com.adianest.AdianestPaymentApp.service.ITransaksiService;
@@ -24,6 +23,9 @@ public class TopUpServiceImpl implements ITopUpService {
 
     @Autowired
     private TopUpDao topUpDao;
+
+    @Autowired
+    private TransaksiTopUpConfirmDao topUpConfirmDao;
 
     @Autowired
     private KategoriTopUpDao kategoriTopUpDao;
@@ -49,10 +51,20 @@ public class TopUpServiceImpl implements ITopUpService {
             topUpDao.save(topup);
 
             transaksiService.insertTransaction(dto.getTransaksiId(), dto.getKategoriTransaksi(), dto.getUserId(),
-                    new BigDecimal(dto.getTotalAmount()).setScale(2, BigDecimal.ROUND_CEILING));
+                    new BigDecimal(dto.getTotalAmount()).setScale(2, BigDecimal.ROUND_FLOOR));
 
             Saldo newSaldo = saldoService.insertSaldo(dto.getUserId(),
-                    new BigDecimal(dto.getNominalTopUp()).setScale(2, BigDecimal.ROUND_CEILING));
+                    new BigDecimal(dto.getNominalTopUp()).setScale(2, BigDecimal.ROUND_FLOOR));
+
+            // update top up confirm
+            TransaksiTopupConfirmPK pk = new TransaksiTopupConfirmPK();
+            pk.setUserId(dto.getUserId());
+            pk.setTransaksiId(dto.getTransaksiId());
+            pk.setKodePembayaran(dto.getKodePembayaran());
+
+            TransaksiTopupConfirm topupConfirm = topUpConfirmDao.findById(pk).orElseThrow(NullPointerException::new);
+            topupConfirm.setKonfirmasiTransaksi(true);
+            topUpConfirmDao.save(topupConfirm);
 
             return newSaldo.getId() != null;
 
@@ -61,8 +73,9 @@ public class TopUpServiceImpl implements ITopUpService {
         return false;
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
-    public TopUpDto confirmTopUp(TopUpDto dto) {
+    public TopUpDto insertConfirmTopUp(TopUpDto dto) {
 
         String transaksiId = transaksiService.getFormatIdTransaksi(dto.getKategoriTransaksi());
         String paymentCode = generatePaymentCode(dto.getKategoriTopUp(), dto.getNoTelpon());
@@ -74,8 +87,45 @@ public class TopUpServiceImpl implements ITopUpService {
         dto.setTotalAmount(nominalTopUp.toString());
         dto.setKonfirmasiTransaksi(false);
 
+        TransaksiTopupConfirm topupConfirm = new TransaksiTopupConfirm();
+        topupConfirm.setTransaksiId(dto.getTransaksiId());
+        topupConfirm.setKodePembayaran(dto.getKodePembayaran());
+        topupConfirm.setNominalTopup(nominalTopUp);
+        topupConfirm.setTotalAmount(nominalTopUp);
+        topupConfirm.setKonfirmasiTransaksi(false);
+        topupConfirm.setUserId(dto.getUserId());
+        topupConfirm.setKategoriTopUp(dto.getKategoriTopUp());
+        topupConfirm.setKategoriTransaksi(dto.getKategoriTransaksi());
+        topupConfirm.setNoTelpon(dto.getNoTelpon());
+
+        topUpConfirmDao.save(topupConfirm);
+        
         return dto;
 
+    }
+
+    @Override
+    public TopUpDto getConfirmTopUp(TopUpDto dto) {
+
+        TransaksiTopupConfirmPK pk = new TransaksiTopupConfirmPK();
+        pk.setUserId(dto.getUserId());
+        pk.setTransaksiId(dto.getTransaksiId());
+        pk.setKodePembayaran(dto.getKodePembayaran());
+
+        TransaksiTopupConfirm topupConfirm = topUpConfirmDao.findById(pk).orElseThrow(NullPointerException::new);
+
+        dto.setTransaksiId(dto.getTransaksiId());
+        dto.setKodePembayaran(topupConfirm.getKodePembayaran());
+        dto.setNominalTopUp(topupConfirm.getNominalTopup().toString());
+        dto.setTotalAmount(topupConfirm.getTotalAmount().toString());
+        dto.setKonfirmasiTransaksi(topupConfirm.getKonfirmasiTransaksi());
+        dto.setUserId(topupConfirm.getUserId());
+        dto.setKategoriTopUp(topupConfirm.getKategoriTopUp());
+        dto.setKategoriTransaksi(topupConfirm.getKategoriTransaksi());
+        dto.setNoTelpon(topupConfirm.getNoTelpon());
+        
+        return dto;
+        
     }
 
     private String generatePaymentCode(String kategoriTopUpStr, String userPhone) {

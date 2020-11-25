@@ -10,6 +10,8 @@ public interface ITopUpService {
 
     boolean insertTopUp(TopUpDto dto);
 
-    TopUpDto confirmTopUp(TopUpDto dto);
+    TopUpDto insertConfirmTopUp(TopUpDto dto);
+
+    TopUpDto getConfirmTopUp(TopUpDto dto);
 
 }

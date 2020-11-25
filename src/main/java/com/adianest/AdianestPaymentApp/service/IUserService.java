@@ -5,6 +5,7 @@
 package com.adianest.AdianestPaymentApp.service;
 
 import com.adianest.AdianestPaymentApp.dto.UserDto;
+import com.adianest.AdianestPaymentApp.model.User;
 
 import java.util.List;
 
@@ -14,9 +15,12 @@ public interface IUserService {
 
     UserDto getOneUserById(String id);
 
+    UserDto getOneUserByNoTelpon(String noTelpon);
+
     List<UserDto> getAllUsers();
 
     boolean deleteUser(String id);
 
     UserDto updateUser(UserDto userDto);
+
 }

@@ -17,6 +17,7 @@
         <class>com.adianest.AdianestPaymentApp.model.TransaksiPulsa</class>
         <class>com.adianest.AdianestPaymentApp.model.TransaksiTopup</class>
         <class>com.adianest.AdianestPaymentApp.model.KategoriTopUp</class>
+        <class>com.adianest.AdianestPaymentApp.model.TransaksiTopupConfirm</class>
         <properties>
             <property name="hibernate.connection.url" value="jdbc:mariadb://localhost:3306/adianest_payment"/>
             <property name="hibernate.connection.driver_class" value="org.mariadb.jdbc.Driver"/>
