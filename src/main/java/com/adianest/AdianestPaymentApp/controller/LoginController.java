@@ -12,15 +12,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 //@RestController
-@CrossOrigin
-@RequestMapping("/login")
+//@CrossOrigin
+//@RequestMapping("/login")
 public class LoginController {
 
-    @Autowired
-    ILoginService loginService;
-
-    @PostMapping("/user")
-    public ResponseEntity<JwtResponseBody> loginUser(@RequestBody UsernameAndPasswordAuthenticationRequest authenticationRequest) {
-        return ResponseEntity.ok(loginService.doLoginUser(authenticationRequest));
-    }
+//    @Autowired
+//    ILoginService loginService;
+//
+//    @PostMapping("/user")
+//    public ResponseEntity<JwtResponseBody> loginUser(@RequestBody UsernameAndPasswordAuthenticationRequest authenticationRequest) {
+//        return ResponseEntity.ok(loginService.doLoginUser(authenticationRequest));
+//    }
 }
