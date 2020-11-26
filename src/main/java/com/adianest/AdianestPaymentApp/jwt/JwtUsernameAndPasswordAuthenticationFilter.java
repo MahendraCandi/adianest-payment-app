@@ -49,14 +49,10 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
             );
 
             return authenticationManager.authenticate(authentication);
+
         }catch (IOException e) {
             throw  new RuntimeException(e);
         }
-    }
-
-    @Override
-    public void setAuthenticationManager(AuthenticationManager authenticationManager) {
-        super.setAuthenticationManager(authenticationManager);
     }
 
     @Override
@@ -65,7 +61,7 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
             HttpServletResponse response,
             FilterChain chain,
             Authentication authResult) throws IOException, ServletException {
-
+        
         Date expirationDate = java.sql.Date.valueOf(LocalDate.now().plusDays(jwtConfig.getExpirationDateAfterDays()));
         String token = Jwts.builder()
                 .setSubject(authResult.getName())
@@ -79,12 +75,13 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
         responseBody.setToken(token);
         responseBody.setExpirationDate(expirationDate);
 
-        response.addHeader(jwtConfig.getTokenHeaderName(), token);
-        response.addHeader(jwtConfig.getExpirationDateHeaderName(), expirationDate.toString());
         response.setCharacterEncoding(jwtConfig.getCharacterEncoding());
         response.setContentType(jwtConfig.getContentType());
         response.getWriter()
                 .write(new ObjectMapper().writeValueAsString(responseBody));
+        response.setStatus(HttpServletResponse.SC_OK);
+
+
 
     }
 

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 //@RestController
 //@CrossOrigin
-//@RequestMapping("/login")
+//@RequestMapping("/login/mobile")
 public class LoginController {
 
 //    @Autowired
