@@ -4,23 +4,25 @@
 
 package com.adianest.AdianestPaymentApp.controller;
 
-import com.adianest.AdianestPaymentApp.jwt.JwtResponseBody;
-import com.adianest.AdianestPaymentApp.jwt.UsernameAndPasswordAuthenticationRequest;
-import com.adianest.AdianestPaymentApp.service.ILoginService;
+import com.adianest.AdianestPaymentApp.dto.UserDto;
+import com.adianest.AdianestPaymentApp.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
-//@RestController
-//@CrossOrigin
-//@RequestMapping("/login/mobile")
+@RestController
+@CrossOrigin
 public class LoginController {
 
-//    @Autowired
-//    ILoginService loginService;
-//
-//    @PostMapping("/user")
-//    public ResponseEntity<JwtResponseBody> loginUser(@RequestBody UsernameAndPasswordAuthenticationRequest authenticationRequest) {
-//        return ResponseEntity.ok(loginService.doLoginUser(authenticationRequest));
-//    }
+    @Autowired
+    IUserService userService;
+
+
+    @PostMapping("/signup")
+    public ResponseEntity insertUser (@RequestBody UserDto userDto) {
+        return ResponseEntity.ok(userService.insertUser(userDto));
+    }
 }

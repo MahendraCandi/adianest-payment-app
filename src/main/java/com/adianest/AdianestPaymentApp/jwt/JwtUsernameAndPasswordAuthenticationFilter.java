@@ -61,7 +61,7 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
             HttpServletResponse response,
             FilterChain chain,
             Authentication authResult) throws IOException, ServletException {
-        
+
         Date expirationDate = java.sql.Date.valueOf(LocalDate.now().plusDays(jwtConfig.getExpirationDateAfterDays()));
         String token = Jwts.builder()
                 .setSubject(authResult.getName())
@@ -80,9 +80,7 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
         response.getWriter()
                 .write(new ObjectMapper().writeValueAsString(responseBody));
         response.setStatus(HttpServletResponse.SC_OK);
-
-
-
+        
     }
 
 

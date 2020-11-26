@@ -30,6 +30,13 @@ public class UserController {
         return ResponseEntity.ok(userService.getOneUserById(userId));
     }
 
+    @GetMapping("/get/phone/{phone}")
+    public ResponseEntity<UserDto> getUserByPhoneNumber(@PathVariable("phone") String phoneNumber) {
+        UserDto dto = userService.getOneUserByNoTelpon(phoneNumber);
+        dto.setPasswordUser(null);
+        return ResponseEntity.ok(dto);
+    }
+
     @PostMapping("/insert")
     public ResponseEntity insertUser (@RequestBody UserDto userDto) {
         return ResponseEntity.ok(userService.insertUser(userDto));

@@ -69,5 +69,5 @@ public interface UserDao extends JpaRepository<User, String> {
     )
     List<Object[]> findAllUsersWithAuthorities();
 
-    Optional<User> findTopByOrderById();
+    Optional<User> findTopByOrderByIdDesc();
 }

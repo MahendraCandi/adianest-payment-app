@@ -40,6 +40,22 @@ public class SaldoImpl implements ISaldo {
         return newSaldo;
     }
 
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public Saldo insertFirstSaldo(String userId) {
+        Saldo newSaldo = new Saldo();
+
+        newSaldo.setUserId(userId);
+        newSaldo.setSaldoAwal(new BigDecimal(0));
+        newSaldo.setNilaiMutasi(new BigDecimal(0));
+        newSaldo.setSaldoAkhir(new BigDecimal(0));
+        newSaldo.setTglMutasi(Timestamp.valueOf(LocalDateTime.now()));
+
+        newSaldo = saldoDao.save(newSaldo);
+
+        return newSaldo;
+    }
+
     @Override
     public Saldo getEndingBalanceByUserId(String userId) {
         return saldoDao.findTopByUserIdOrderByTglMutasiDesc(userId).orElseThrow(NullPointerException::new);

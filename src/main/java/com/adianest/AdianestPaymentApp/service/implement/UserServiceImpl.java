@@ -7,8 +7,10 @@ package com.adianest.AdianestPaymentApp.service.implement;
 import com.adianest.AdianestPaymentApp.config.PasswordConfig;
 import com.adianest.AdianestPaymentApp.dao.UserDao;
 import com.adianest.AdianestPaymentApp.dto.UserDto;
+import com.adianest.AdianestPaymentApp.model.Saldo;
 import com.adianest.AdianestPaymentApp.model.User;
 import com.adianest.AdianestPaymentApp.model.UserAuthorities;
+import com.adianest.AdianestPaymentApp.service.ISaldo;
 import com.adianest.AdianestPaymentApp.service.IUserAuthorities;
 import com.adianest.AdianestPaymentApp.service.IUserService;
 import org.apache.logging.log4j.LogManager;
@@ -32,6 +34,9 @@ public class UserServiceImpl implements IUserService {
     @Autowired
     private IUserAuthorities userAuthoritiesSvc;
 
+    @Autowired
+    private ISaldo saldoService;
+
     private static final Logger log = LogManager.getLogger(UserServiceImpl.class);
 
     @Transactional(rollbackFor = Exception.class)
@@ -50,7 +55,11 @@ public class UserServiceImpl implements IUserService {
             userDao.save(user);
 
             UserAuthorities userAuthorities = new UserAuthorities(user.getId(), userDto.getIdAuthorities());
-            if (!userAuthoritiesSvc.insertUserAuthorities(userAuthorities)) throw new NullPointerException("Null");
+            if (!userAuthoritiesSvc.insertUserAuthorities(userAuthorities))
+                throw new NullPointerException("failed insert user authorities");
+
+            Saldo saldo = saldoService.insertFirstSaldo(user.getId());
+            if (saldo.getId() == null) throw new NullPointerException("Failed insert first saldo");
 
             success = true;
         } catch (Exception e){
@@ -59,6 +68,8 @@ public class UserServiceImpl implements IUserService {
 
         return success;
     }
+
+
 
     @Override
     public UserDto getOneUserById(String id) {
@@ -157,7 +168,7 @@ public class UserServiceImpl implements IUserService {
     }
 
     private String createUserId() {
-        User u = userDao.findTopByOrderById().orElse(null);
+        User u = userDao.findTopByOrderByIdDesc().orElse(null);
         String userId = "user-";
         if (u == null) {
             userId += "001";

@@ -13,6 +13,8 @@ public interface ISaldo {
 
     Saldo insertSaldo(String userId, BigDecimal mutationValue);
 
+    Saldo insertFirstSaldo(String userId);
+
     Saldo getEndingBalanceByUserId(String userId);
 
     SaldoDto getEndingBalanceByUserIdAsDto(String userId);
