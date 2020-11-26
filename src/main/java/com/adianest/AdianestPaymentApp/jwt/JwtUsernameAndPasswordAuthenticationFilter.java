@@ -54,34 +54,39 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
         }
     }
 
-//    @Override
-//    protected void successfulAuthentication(
-//            HttpServletRequest request,
-//            HttpServletResponse response,
-//            FilterChain chain,
-//            Authentication authResult) throws IOException, ServletException {
-//
-//        Date expirationDate = java.sql.Date.valueOf(LocalDate.now().plusDays(jwtConfig.getExpirationDateAfterDays()));
-//        String token = Jwts.builder()
-//                .setSubject(authResult.getName())
-//                .claim("authorities", authResult.getAuthorities())
-//                .setIssuedAt(new Date())
-//                .setExpiration(expirationDate)
-//                .signWith(jwtConfig.getSigningSecretKey())
-//                .compact();
-//
-//        JwtResponseBody responseBody = new JwtResponseBody();
-//        responseBody.setToken(token);
-//        responseBody.setExpirationDate(expirationDate);
-//
-//        response.addHeader(jwtConfig.getTokenHeaderName(), token);
-//        response.addHeader(jwtConfig.getExpirationDateHeaderName(), expirationDate.toString());
-//        response.setCharacterEncoding(jwtConfig.getCharacterEncoding());
-//        response.setContentType(jwtConfig.getContentType());
-//        response.getWriter()
-//                .write(new ObjectMapper().writeValueAsString(responseBody));
-//
-//    }
+    @Override
+    public void setAuthenticationManager(AuthenticationManager authenticationManager) {
+        super.setAuthenticationManager(authenticationManager);
+    }
+
+    @Override
+    protected void successfulAuthentication(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            FilterChain chain,
+            Authentication authResult) throws IOException, ServletException {
+
+        Date expirationDate = java.sql.Date.valueOf(LocalDate.now().plusDays(jwtConfig.getExpirationDateAfterDays()));
+        String token = Jwts.builder()
+                .setSubject(authResult.getName())
+                .claim("authorities", authResult.getAuthorities())
+                .setIssuedAt(new Date())
+                .setExpiration(expirationDate)
+                .signWith(jwtConfig.getSigningSecretKey())
+                .compact();
+
+        JwtResponseBody responseBody = new JwtResponseBody();
+        responseBody.setToken(token);
+        responseBody.setExpirationDate(expirationDate);
+
+        response.addHeader(jwtConfig.getTokenHeaderName(), token);
+        response.addHeader(jwtConfig.getExpirationDateHeaderName(), expirationDate.toString());
+        response.setCharacterEncoding(jwtConfig.getCharacterEncoding());
+        response.setContentType(jwtConfig.getContentType());
+        response.getWriter()
+                .write(new ObjectMapper().writeValueAsString(responseBody));
+
+    }
 
 
 }

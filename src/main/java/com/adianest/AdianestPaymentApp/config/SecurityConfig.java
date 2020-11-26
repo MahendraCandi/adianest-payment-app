@@ -36,22 +36,25 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+
+//        http.csrf().disable()
+//                .authorizeRequests().antMatchers("/**").permitAll();
+
+        JwtUsernameAndPasswordAuthenticationFilter loginFilter =
+                new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager(), jwtConfig);
+        loginFilter.setFilterProcessesUrl("/login/mobile");
+
         http
-                .csrf().disable()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-
-                // add filter for every request. this filter for checking username and password to create jwt
-                .addFilter(new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager(), jwtConfig))
-                .addFilterAfter(new JwtTokenVerifierFilter(jwtConfig), JwtUsernameAndPasswordAuthenticationFilter.class)
+                .cors().and().csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/").permitAll()
-                .antMatchers(HttpMethod.POST, "/login/user").permitAll()
+                .antMatchers("/user").permitAll()
                 .antMatchers("/api/**").hasAuthority(AppRole.ROLE_USER.name())
-                .anyRequest()
-                .authenticated();
-
+                .anyRequest().authenticated()
+                .and()
+                .addFilter(loginFilter)
+                .addFilterAfter(new JwtTokenVerifierFilter(jwtConfig), JwtUsernameAndPasswordAuthenticationFilter.class)
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 
     @Override
@@ -67,9 +70,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return provider;
     }
 
-    @Override
-    @Bean
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
-    }
+//    @Bean
+//    public JwtUsernameAndPasswordAuthenticationFilter getJwtUsernameAndPasswordAuthenticationFilter() throws Exception {
+//        final JwtUsernameAndPasswordAuthenticationFilter filter = new JwtUsernameAndPasswordAuthenticationFilter( jwtConfig);
+//        filter.setFilterProcessesUrl("/login/mobile");
+//        return filter;
+//    }
+//
+//    @Override
+//    @Bean
+//    public AuthenticationManager authenticationManagerBean() throws Exception {
+//        return super.authenticationManagerBean();
+//    }
+
 }
