@@ -17,6 +17,7 @@ public class UserDto {
     private String nameUser;
     private Integer idAuthorities;
     private String nameAuthorities;
+    private String endingBalance;
 
     public String getNameAuthorities() {
         return nameAuthorities;
@@ -72,5 +73,13 @@ public class UserDto {
 
     public void setNoTelpon(String noTelpon) {
         this.noTelpon = noTelpon;
+    }
+
+    public String getEndingBalance() {
+        return endingBalance;
+    }
+
+    public void setEndingBalance(String endingBalance) {
+        this.endingBalance = endingBalance;
     }
 }

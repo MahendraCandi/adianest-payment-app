@@ -18,6 +18,14 @@
         <class>com.adianest.AdianestPaymentApp.model.TransaksiTopup</class>
         <class>com.adianest.AdianestPaymentApp.model.KategoriTopUp</class>
         <class>com.adianest.AdianestPaymentApp.model.TransaksiTopupConfirm</class>
+        <class>com.adianest.AdianestPaymentApp.model.KategoriDigitial</class>
+        <class>com.adianest.AdianestPaymentApp.model.KategoriSms</class>
+        <class>com.adianest.AdianestPaymentApp.model.KategoriTelepon</class>
+        <class>com.adianest.AdianestPaymentApp.model.TransaksiDigital</class>
+        <class>com.adianest.AdianestPaymentApp.model.TransaksiPaketInternet</class>
+        <class>com.adianest.AdianestPaymentApp.model.TransaksiSms</class>
+        <class>com.adianest.AdianestPaymentApp.model.TransaksiTelepon</class>
+        <class>com.adianest.AdianestPaymentApp.model.KategoriInternet</class>
         <properties>
             <property name="hibernate.connection.url" value="jdbc:mariadb://localhost:3306/adianest_payment"/>
             <property name="hibernate.connection.driver_class" value="org.mariadb.jdbc.Driver"/>

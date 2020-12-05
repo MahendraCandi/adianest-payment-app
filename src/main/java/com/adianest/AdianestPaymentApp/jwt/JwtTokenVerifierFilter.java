@@ -53,13 +53,8 @@ public class JwtTokenVerifierFilter extends OncePerRequestFilter {
                     .build()
                     .parseClaimsJws(token);
 
-            System.out.println("Signature: " + claimsJws.getSignature());
-            System.out.println("Header: " + new ObjectMapper().writeValueAsString(claimsJws.getHeader()));
-            System.out.println("Claims: " + new ObjectMapper().writeValueAsString(claimsJws.getBody()));
-
             Claims body = claimsJws.getBody();
 
-            System.out.println("body: " + body.get("authorities"));
 
             // get username
             String username = body.getSubject();

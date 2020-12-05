@@ -4,7 +4,9 @@
 
 package com.adianest.AdianestPaymentApp.controller;
 
+import com.adianest.AdianestPaymentApp.dto.SaldoDto;
 import com.adianest.AdianestPaymentApp.dto.UserDto;
+import com.adianest.AdianestPaymentApp.service.ISaldo;
 import com.adianest.AdianestPaymentApp.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +22,9 @@ public class UserController {
     @Autowired
     IUserService userService;
 
+    @Autowired
+    ISaldo saldoService;
+
     @GetMapping("/get/all")
     public ResponseEntity<List<UserDto>> getAllUsers (){
         return ResponseEntity.ok(userService.getAllUsers());
@@ -32,7 +37,15 @@ public class UserController {
 
     @GetMapping("/get/phone/{phone}")
     public ResponseEntity<UserDto> getUserByPhoneNumber(@PathVariable("phone") String phoneNumber) {
+        try{
+//            Thread.sleep(3000L);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
         UserDto dto = userService.getOneUserByNoTelpon(phoneNumber);
+        SaldoDto saldoDto = saldoService.getEndingBalanceByUserIdAsDto(dto.getIdUser());
+        dto.setEndingBalance(saldoDto.getEndingBalance());
         dto.setPasswordUser(null);
         return ResponseEntity.ok(dto);
     }
