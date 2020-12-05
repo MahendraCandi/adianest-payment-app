@@ -18,7 +18,7 @@ public class TopUpDto {
     private String adminFee;
     private String totalAmount;
     private String kodePembayaran;
-    boolean konfirmasiTransaksi;
+    private Boolean konfirmasiTransaksi;
 
     public String getUserId() {
         return userId;
@@ -84,11 +84,11 @@ public class TopUpDto {
         this.kodePembayaran = kodePembayaran;
     }
 
-    public boolean isKonfirmasiTransaksi() {
+    public Boolean isKonfirmasiTransaksi() {
         return konfirmasiTransaksi;
     }
 
-    public void setKonfirmasiTransaksi(boolean konfirmasiTransaksi) {
+    public void setKonfirmasiTransaksi(Boolean konfirmasiTransaksi) {
         this.konfirmasiTransaksi = konfirmasiTransaksi;
     }
 

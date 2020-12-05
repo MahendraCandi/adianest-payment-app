@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class InternetDto {
+    private String idTransaksi;
     private String idKategori;
     private String jumlah;
     private String ukuranSatuan;
@@ -79,5 +80,13 @@ public class InternetDto {
 
     public void setIdPaket(String idPaket) {
         this.idPaket = idPaket;
+    }
+
+    public String getIdTransaksi() {
+        return idTransaksi;
+    }
+
+    public void setIdTransaksi(String idTransaksi) {
+        this.idTransaksi = idTransaksi;
     }
 }

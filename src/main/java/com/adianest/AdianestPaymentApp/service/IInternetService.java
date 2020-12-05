@@ -13,4 +13,6 @@ public interface IInternetService {
     List<InternetDto> getAllPaketInternet();
 
     boolean insertTransaksi(InternetDto dto);
+
+    InternetDto getTransaksiByIdTransaksi(String idTransaksi);
 }

@@ -16,6 +16,8 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class TransaksiServiceImpl implements ITransaksiService {
@@ -68,5 +70,10 @@ public class TransaksiServiceImpl implements ITransaksiService {
 
         }
         return formatId;
+    }
+
+    @Override
+    public List<Transaksi> getAllTransaksiByIdUser(String idUser) {
+        return transaksiDao.findAllByUserIdOrderByTglTransaksiDesc(idUser);
     }
 }

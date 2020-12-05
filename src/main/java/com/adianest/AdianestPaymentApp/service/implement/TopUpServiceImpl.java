@@ -128,6 +128,19 @@ public class TopUpServiceImpl implements ITopUpService {
         
     }
 
+    @Override
+    public TopUpDto getTransaksiByIdTransaksi(String idTransaksi) {
+        TransaksiTopup topup = topUpDao.findById(idTransaksi).orElse(null);
+        TopUpDto dto = new TopUpDto();
+        if (topup != null) {
+            dto.setTransaksiId(topup.getTransaksiId());
+            dto.setKategoriTopUp(topup.getKategori());
+            dto.setKodePembayaran(topup.getKodePembayaran());
+            dto.setNominalTopUp(topup.getNominal().setScale(0, BigDecimal.ROUND_FLOOR).toString());
+        }
+        return dto;
+    }
+
     private String generatePaymentCode(String kategoriTopUpStr, String userPhone) {
         KategoriTopUp kategoriTopUp = kategoriTopUpDao.findById(kategoriTopUpStr).orElseThrow(NullPointerException::new);
 

@@ -80,4 +80,19 @@ public class InternetServiceImpl implements IInternetService {
 
         return newSaldo.getId() != null;
     }
+
+    @Override
+    public InternetDto getTransaksiByIdTransaksi(String idTransaksi) {
+        TransaksiPaketInternet internet = internetDao.findById(idTransaksi).orElse(null);
+        InternetDto dto = null;
+        if (internet != null) {
+            KategoriInternet k = kategoriInternetDao.findById(internet.getPaketKuota()).orElse(null);
+            dto = new InternetDto();
+            dto.setIdTransaksi(internet.getTransaksiId());
+            dto.setNomorTujuan(internet.getNomorTujuan());
+            dto.setNamaPaket(k != null ? k.getNama() : null);
+            dto.setHargaPaket(internet.getHargaKuota().setScale(0, BigDecimal.ROUND_FLOOR).toString());
+        }
+        return dto;
+    }
 }

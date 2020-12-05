@@ -14,4 +14,6 @@ public interface ITopUpService {
 
     TopUpDto getConfirmTopUp(TopUpDto dto);
 
+    TopUpDto getTransaksiByIdTransaksi(String idTransaksi);
+
 }
