@@ -1,7 +1,9 @@
 package com.adianest.AdianestPaymentApp.service.implement;
 
+import com.adianest.AdianestPaymentApp.common.AppCommonUtil;
 import com.adianest.AdianestPaymentApp.dto.HistoryDto;
 import com.adianest.AdianestPaymentApp.dto.InternetDto;
+import com.adianest.AdianestPaymentApp.dto.SmsDto;
 import com.adianest.AdianestPaymentApp.dto.TopUpDto;
 import com.adianest.AdianestPaymentApp.model.EnumKategoriTransaksi;
 import com.adianest.AdianestPaymentApp.model.Transaksi;
@@ -45,6 +47,10 @@ public class HistoryServiceImpl implements IHistoryService {
                     dto.setDetailTransaksi(topUpDto);
                     setTransaksi(dto, t);
 
+                    String deskripsi = String.format("Top up saldo melalui %s sebesar Rp. %s",
+                            AppCommonUtil.firstCharacterToUpperCase(topUpDto.getKategoriTopUp()),
+                            AppCommonUtil.toRupiahFormat(dto.getTotalTransaksi()));
+                    dto.setDeskripsi(deskripsi);
                     dtos.add(dto);
                 } else if (t.getKategori().equals(EnumKategoriTransaksi.PAKET_INTERNET.name())) {
                     InternetDto internetDto = internetService.getTransaksiByIdTransaksi(t.getId());
@@ -52,6 +58,11 @@ public class HistoryServiceImpl implements IHistoryService {
                     dto.setDetailTransaksi(internetDto);
                     setTransaksi(dto, t);
 
+                    String deskripsi = String
+                            .format("Pembelian paket data %s ke no. %s berhasil, harga Rp. %s",
+                                    internetDto.getNamaPaket(), internetDto.getNomorTujuan(),
+                                    AppCommonUtil.toRupiahFormat(dto.getTotalTransaksi()));
+                    dto.setDeskripsi(deskripsi);
                     dtos.add(dto);
                 }
             }

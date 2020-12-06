@@ -7,5 +7,6 @@ package com.adianest.AdianestPaymentApp.model;
 public enum EnumKategoriTransaksi {
     PAKET_INTERNET,
     PULSA_REGULER,
-    TOP_UP
+    TOP_UP,
+    SMS
 }

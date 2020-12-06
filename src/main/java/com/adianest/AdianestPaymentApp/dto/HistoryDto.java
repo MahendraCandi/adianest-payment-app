@@ -10,6 +10,7 @@ public class HistoryDto<T> {
     private String tglTransaksi;
     private String jamTransaksi;
     private String kategori;
+    private String deskripsi;
     private T detailTransaksi;
 
     public String getIdUser() {
@@ -66,5 +67,13 @@ public class HistoryDto<T> {
 
     public void setDetailTransaksi(T detailTransaksi) {
         this.detailTransaksi = detailTransaksi;
+    }
+
+    public String getDeskripsi() {
+        return deskripsi;
+    }
+
+    public void setDeskripsi(String deskripsi) {
+        this.deskripsi = deskripsi;
     }
 }

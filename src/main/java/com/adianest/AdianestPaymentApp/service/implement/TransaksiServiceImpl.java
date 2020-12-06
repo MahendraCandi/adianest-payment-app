@@ -60,7 +60,7 @@ public class TransaksiServiceImpl implements ITransaksiService {
             LocalDateTime previous = LocalDateTime.parse(dateTimePrevious, dtf);
 
             int row = 1;
-            if (now.isEqual(previous)) {
+            if (now.getHour() == previous.getHour()) {
                 String lastRow = idTransaksi.substring(idTransaksi.length() - 3);
                 row = Integer.valueOf(lastRow);
                 row++;
