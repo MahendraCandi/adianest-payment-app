@@ -24,7 +24,7 @@ public class PaketInternetController {
         return internetService.getAllPaketInternet();
     }
 
-    @PostMapping("paket/insert")
+    @PostMapping("/paket/insert")
     public boolean insertTransaksi(@RequestBody InternetDto dto) {
         return internetService.insertTransaksi(dto);
     }

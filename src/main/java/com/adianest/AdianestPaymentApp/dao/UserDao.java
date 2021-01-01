@@ -25,9 +25,9 @@ public interface UserDao extends JpaRepository<User, String> {
                     "   C.id AS AUTHORITIES_ID, " +
                     "   C.nama AS AUTHORITIES_NAME " +
                     "FROM " +
-                    "   USER A " +
-                    "LEFT JOIN USER_AUTHORITIES B ON A.id = B.user_id " +
-                    "JOIN AUTHORITIES C ON B.authorities_id = C.id " +
+                    "   user A " +
+                    "LEFT JOIN user_authorities B ON A.id = B.user_id " +
+                    "JOIN authorities C ON B.authorities_id = C.id " +
                     "WHERE " +
                     "   A.id = :id",
             nativeQuery = true
@@ -44,9 +44,9 @@ public interface UserDao extends JpaRepository<User, String> {
                     "   C.nama AS AUTHORITIES_NAME, " +
                     "   A.password AS PASSWORD " +
                     "FROM " +
-                    "   USER A " +
-                    "LEFT JOIN USER_AUTHORITIES B ON A.id = B.user_id " +
-                    "JOIN AUTHORITIES C ON B.authorities_id = C.id " +
+                    "   user A " +
+                    "LEFT JOIN user_authorities B ON A.id = B.user_id " +
+                    "JOIN authorities C ON B.authorities_id = C.id " +
                     "WHERE " +
                     "   A.no_telpon = :no_telpon",
             nativeQuery = true
@@ -62,9 +62,9 @@ public interface UserDao extends JpaRepository<User, String> {
                     "   C.id AS AUTHORITIES_ID, " +
                     "   C.nama AS AUTHORITIES_NAME " +
                     "FROM " +
-                    "   USER A " +
-                    "LEFT JOIN USER_AUTHORITIES B ON A.id = B.user_id " +
-                    "JOIN AUTHORITIES C ON B.authorities_id = C.id ",
+                    "   user A " +
+                    "LEFT JOIN user_authorities B ON A.id = B.user_id " +
+                    "JOIN authorities C ON B.authorities_id = C.id ",
             nativeQuery = true
     )
     List<Object[]> findAllUsersWithAuthorities();

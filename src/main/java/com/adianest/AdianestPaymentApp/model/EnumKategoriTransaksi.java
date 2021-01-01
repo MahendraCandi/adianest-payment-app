@@ -8,5 +8,6 @@ public enum EnumKategoriTransaksi {
     PAKET_INTERNET,
     PULSA_REGULER,
     TOP_UP,
-    SMS
+    SMS,
+    TELEPON
 }
