@@ -1,31 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-  ~ Copyright (c) 2020. <a href="https://github.com/MahendraCandi">MahendraCandi </a>.
-  -->
-
 <persistence xmlns="http://java.sun.com/xml/ns/persistence" version="2.0">
 
     <persistence-unit name="NewPersistenceUnit">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
-        <class>com.adianest.AdianestPaymentApp.model.Authorities</class>
-        <class>com.adianest.AdianestPaymentApp.model.Photo</class>
-        <class>com.adianest.AdianestPaymentApp.model.User</class>
-        <class>com.adianest.AdianestPaymentApp.model.UserAuthorities</class>
-        <class>com.adianest.AdianestPaymentApp.model.KategoriTransaksi</class>
-        <class>com.adianest.AdianestPaymentApp.model.Saldo</class>
-        <class>com.adianest.AdianestPaymentApp.model.Transaksi</class>
-        <class>com.adianest.AdianestPaymentApp.model.TransaksiPulsa</class>
-        <class>com.adianest.AdianestPaymentApp.model.TransaksiTopup</class>
-        <class>com.adianest.AdianestPaymentApp.model.KategoriTopUp</class>
-        <class>com.adianest.AdianestPaymentApp.model.TransaksiTopupConfirm</class>
+        <class>com.adianest.AdianestPaymentApp.model.KategoriPulsa</class>
         <class>com.adianest.AdianestPaymentApp.model.KategoriDigitial</class>
-        <class>com.adianest.AdianestPaymentApp.model.KategoriSms</class>
-        <class>com.adianest.AdianestPaymentApp.model.KategoriTelepon</class>
-        <class>com.adianest.AdianestPaymentApp.model.TransaksiDigital</class>
-        <class>com.adianest.AdianestPaymentApp.model.TransaksiPaketInternet</class>
-        <class>com.adianest.AdianestPaymentApp.model.TransaksiSms</class>
-        <class>com.adianest.AdianestPaymentApp.model.TransaksiTelepon</class>
-        <class>com.adianest.AdianestPaymentApp.model.KategoriInternet</class>
         <properties>
             <property name="hibernate.connection.url" value="jdbc:mariadb://localhost:3306/adianest_payment"/>
             <property name="hibernate.connection.driver_class" value="org.mariadb.jdbc.Driver"/>

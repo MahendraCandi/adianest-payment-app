@@ -9,5 +9,10 @@ public enum EnumKategoriTransaksi {
     PULSA_REGULER,
     TOP_UP,
     SMS,
-    TELEPON
+    TELEPON,
+    DANA,
+    GOPAY,
+    GRAB,
+    OVO,
+    SHOOPE_PAY
 }

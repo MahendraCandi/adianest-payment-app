@@ -1,6 +1,6 @@
 package com.adianest.AdianestPaymentApp.service;
 
-import com.adianest.AdianestPaymentApp.model.PulsaDto;
+import com.adianest.AdianestPaymentApp.dto.PulsaDto;
 
 import java.util.List;
 

@@ -1,6 +1,6 @@
 package com.adianest.AdianestPaymentApp.controller;
 
-import com.adianest.AdianestPaymentApp.model.PulsaDto;
+import com.adianest.AdianestPaymentApp.dto.PulsaDto;
 import com.adianest.AdianestPaymentApp.service.IPulsaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

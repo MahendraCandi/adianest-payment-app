@@ -5,8 +5,10 @@
 package com.adianest.AdianestPaymentApp.service.implement;
 
 import com.adianest.AdianestPaymentApp.config.PasswordConfig;
+import com.adianest.AdianestPaymentApp.dao.PhotoDao;
 import com.adianest.AdianestPaymentApp.dao.UserDao;
 import com.adianest.AdianestPaymentApp.dto.UserDto;
+import com.adianest.AdianestPaymentApp.model.Photo;
 import com.adianest.AdianestPaymentApp.model.Saldo;
 import com.adianest.AdianestPaymentApp.model.User;
 import com.adianest.AdianestPaymentApp.model.UserAuthorities;
@@ -27,6 +29,9 @@ public class UserServiceImpl implements IUserService {
 
     @Autowired
     private UserDao userDao;
+
+    @Autowired
+    private PhotoDao photoDao;
 
     @Autowired
     private PasswordConfig passwordConfig;
@@ -104,6 +109,7 @@ public class UserServiceImpl implements IUserService {
                 userDto.setIdAuthorities(Integer.valueOf(obj[4].toString()));
                 userDto.setNameAuthorities(obj[5].toString());
                 userDto.setPasswordUser(obj[6].toString());
+                userDto.setIdPhoto(obj[7].toString());
             }
         }
 
@@ -133,6 +139,7 @@ public class UserServiceImpl implements IUserService {
         return null;
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public boolean deleteUser(String id) {
         try{
@@ -144,16 +151,34 @@ public class UserServiceImpl implements IUserService {
         return false;
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public UserDto updateUser(UserDto userDto) {
 
         try{
             User user = userDao.findById(userDto.getIdUser()).orElseThrow(NullPointerException::new);
 
+
+            if (userDto.getPathPhoto() != null && userDto.getNamaPhoto() !=null) {
+                Photo p;
+                if (user.getPhotoId() == null) {
+                    p = new Photo();
+                } else {
+                    p = photoDao.findById(user.getPhotoId()).get();
+                }
+
+                p.setNamaFile(userDto.getNamaPhoto());
+                p.setPathFile(userDto.getPathPhoto());
+
+                p = photoDao.save(p);
+
+                user.setPhotoId(p.getId());
+            }
+
             user.setNoTelpon(userDto.getNoTelpon());
             user.setEmail(userDto.getEmailUser());
             user.setNamaLengkap(userDto.getNameUser());
-//            user.setPhotoId();
+
             userDao.save(user);
 
             UserAuthorities userAuthorities = new UserAuthorities(user.getId(), userDto.getIdAuthorities());

@@ -1,4 +1,4 @@
-package com.adianest.AdianestPaymentApp.model;
+package com.adianest.AdianestPaymentApp.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 

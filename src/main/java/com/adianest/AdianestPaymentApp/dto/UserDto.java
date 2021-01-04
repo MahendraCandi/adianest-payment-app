@@ -18,6 +18,9 @@ public class UserDto {
     private Integer idAuthorities;
     private String nameAuthorities;
     private String endingBalance;
+    private String idPhoto;
+    private String pathPhoto;
+    private String namaPhoto;
 
     public String getNameAuthorities() {
         return nameAuthorities;
@@ -81,5 +84,29 @@ public class UserDto {
 
     public void setEndingBalance(String endingBalance) {
         this.endingBalance = endingBalance;
+    }
+
+    public String getIdPhoto() {
+        return idPhoto;
+    }
+
+    public void setIdPhoto(String idPhoto) {
+        this.idPhoto = idPhoto;
+    }
+
+    public String getPathPhoto() {
+        return pathPhoto;
+    }
+
+    public void setPathPhoto(String pathPhoto) {
+        this.pathPhoto = pathPhoto;
+    }
+
+    public String getNamaPhoto() {
+        return namaPhoto;
+    }
+
+    public void setNamaPhoto(String namaPhoto) {
+        this.namaPhoto = namaPhoto;
     }
 }

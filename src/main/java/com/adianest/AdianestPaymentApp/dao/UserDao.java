@@ -42,7 +42,8 @@ public interface UserDao extends JpaRepository<User, String> {
                     "   A.nama_lengkap AS NAMA_LENGKAP, " +
                     "   C.id AS AUTHORITIES_ID, " +
                     "   C.nama AS AUTHORITIES_NAME, " +
-                    "   A.password AS PASSWORD " +
+                    "   A.password AS PASSWORD, " +
+                    "   A.photo_id AS PHOTO " +
                     "FROM " +
                     "   user A " +
                     "LEFT JOIN user_authorities B ON A.id = B.user_id " +

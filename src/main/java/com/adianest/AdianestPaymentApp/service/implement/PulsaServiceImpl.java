@@ -1,7 +1,9 @@
 package com.adianest.AdianestPaymentApp.service.implement;
 
+import com.adianest.AdianestPaymentApp.common.AppCommonUtil;
 import com.adianest.AdianestPaymentApp.dao.KategoriPulsaDao;
 import com.adianest.AdianestPaymentApp.dao.TransaksiPulsaDao;
+import com.adianest.AdianestPaymentApp.dto.PulsaDto;
 import com.adianest.AdianestPaymentApp.model.*;
 import com.adianest.AdianestPaymentApp.service.IPulsaService;
 import com.adianest.AdianestPaymentApp.service.ISaldo;
@@ -38,13 +40,13 @@ public class PulsaServiceImpl implements IPulsaService {
         for (KategoriPulsa k : kategoriPulsas) {
             PulsaDto dto = new PulsaDto();
             dto.setIdPaket(k.getId());
-            dto.setJumlah(k.getJumlah());
+            dto.setJumlah(AppCommonUtil.toRupiahFormat(k.getJumlah()));
             dto.setHargaPaket(k.getHarga().setScale(0, BigDecimal.ROUND_FLOOR).toString());
 
             dtos.add(dto);
         }
 
-        dtos.sort(Comparator.comparing(((a) -> Long.parseLong(a.getJumlah()))));
+        dtos.sort(Comparator.comparing(((a) -> Long.parseLong(a.getHargaPaket()))));
 
         return dtos;
     }
