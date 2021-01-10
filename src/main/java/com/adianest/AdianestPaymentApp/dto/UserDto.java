@@ -6,6 +6,7 @@ package com.adianest.AdianestPaymentApp.dto;
 
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import org.springframework.lang.Nullable;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserDto {
@@ -90,7 +91,7 @@ public class UserDto {
         return idPhoto;
     }
 
-    public void setIdPhoto(String idPhoto) {
+    public void setIdPhoto(@Nullable String idPhoto) {
         this.idPhoto = idPhoto;
     }
 

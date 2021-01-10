@@ -109,7 +109,7 @@ public class UserServiceImpl implements IUserService {
                 userDto.setIdAuthorities(Integer.valueOf(obj[4].toString()));
                 userDto.setNameAuthorities(obj[5].toString());
                 userDto.setPasswordUser(obj[6].toString());
-                userDto.setIdPhoto(obj[7].toString());
+                userDto.setIdPhoto(obj[7] == null ? null : obj[7].toString());
             }
         }
 
