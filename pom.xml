@@ -21,6 +21,7 @@
 	<properties>
 		<java.version>1.8</java.version>
         <jwt.version>0.11.2</jwt.version>
+        <thin.version>1.0.23.RELEASE</thin.version>
 	</properties>
 
 	<dependencies>
@@ -101,61 +102,83 @@
 			<artifactId>commons-io</artifactId>
 			<version>2.6</version>
 		</dependency>
-	</dependencies>
+        <!-- https://mvnrepository.com/artifact/com.google.firebase/firebase-admin -->
+        <dependency>
+            <groupId>com.google.firebase</groupId>
+            <artifactId>firebase-admin</artifactId>
+            <version>7.1.0</version>
+        </dependency>
+
+    </dependencies>
 
 	<build>
+        <finalName>adianestPaymentApp</finalName>
 		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
 
-				<!-- change .original name -->
-				<executions>
-					<execution>
-						<id>repackage</id>
-						<configuration>
-							<classifier>exec</classifier>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.springframework.boot.experimental</groupId>
+                        <artifactId>spring-boot-thin-layout</artifactId>
+                        <version>${thin.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
 
-			<!-- build manual -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-dependency-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>copy-dependencies</id>
-						<phase>prepare-package</phase>
-						<goals>
-							<goal>copy-dependencies</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>
-								${project.build.directory}/libs
-							</outputDirectory>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-				<configuration>
-					<archive>
-						<manifest>
-							<addClasspath>true</addClasspath>
-							<classpathPrefix>libs/</classpathPrefix>
+            <!--separate jar and lib-->
+			<!--<plugin>-->
+				<!--<groupId>org.springframework.boot</groupId>-->
+				<!--<artifactId>spring-boot-maven-plugin</artifactId>-->
 
-							<!-- main class name -->
-							<mainClass>
-								com.adianest.AdianestPaymentApp.AdianestPaymentAppApplication
-							</mainClass>
-						</manifest>
-					</archive>
-				</configuration>
-			</plugin>
+				<!--&lt;!&ndash; change .original name &ndash;&gt;-->
+				<!--<executions>-->
+					<!--<execution>-->
+						<!--<id>repackage</id>-->
+						<!--<configuration>-->
+							<!--<classifier>exec</classifier>-->
+						<!--</configuration>-->
+					<!--</execution>-->
+				<!--</executions>-->
+			<!--</plugin>-->
+
+			<!--&lt;!&ndash; build manual &ndash;&gt;-->
+			<!--<plugin>-->
+				<!--<groupId>org.apache.maven.plugins</groupId>-->
+				<!--<artifactId>maven-dependency-plugin</artifactId>-->
+				<!--<executions>-->
+					<!--<execution>-->
+						<!--<id>copy-dependencies</id>-->
+						<!--<phase>prepare-package</phase>-->
+						<!--<goals>-->
+							<!--<goal>copy-dependencies</goal>-->
+						<!--</goals>-->
+						<!--<configuration>-->
+							<!--<outputDirectory>-->
+								<!--${project.build.directory}/libs-->
+							<!--</outputDirectory>-->
+						<!--</configuration>-->
+					<!--</execution>-->
+				<!--</executions>-->
+			<!--</plugin>-->
+			<!--<plugin>-->
+				<!--<groupId>org.apache.maven.plugins</groupId>-->
+				<!--<artifactId>maven-jar-plugin</artifactId>-->
+				<!--<configuration>-->
+					<!--<archive>-->
+						<!--<manifest>-->
+							<!--<addClasspath>true</addClasspath>-->
+							<!--<classpathPrefix>libs/</classpathPrefix>-->
+
+							<!--&lt;!&ndash; main class name &ndash;&gt;-->
+							<!--<mainClass>-->
+								<!--com.adianest.AdianestPaymentApp.AdianestPaymentAppApplication-->
+							<!--</mainClass>-->
+						<!--</manifest>-->
+					<!--</archive>-->
+				<!--</configuration>-->
+			<!--</plugin>-->
 		</plugins>
 	</build>
 
