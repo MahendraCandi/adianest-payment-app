@@ -5,10 +5,12 @@
 package com.adianest.AdianestPaymentApp;
 
 import com.adianest.AdianestPaymentApp.dao.UserDao;
+import com.adianest.AdianestPaymentApp.dto.UserDto;
 import com.adianest.AdianestPaymentApp.model.Saldo;
 import com.adianest.AdianestPaymentApp.model.User;
 import com.adianest.AdianestPaymentApp.service.ISaldo;
 import com.adianest.AdianestPaymentApp.service.ITransaksiService;
+import com.adianest.AdianestPaymentApp.service.IUserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +32,9 @@ class AdianestPaymentAppApplicationTests {
 	@Autowired
 	ISaldo saldoService;
 
+	@Autowired
+	IUserService userService;
+
 	@Test
 	void contextLoads() {
 //		User user = userDao.findTopByOrderByIdDesc().orElse(null);
@@ -43,18 +48,18 @@ class AdianestPaymentAppApplicationTests {
 
 //		System.out.println(String.format("%03d", xx));
 
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("ddMMyyHHmm");
-        String date = LocalDateTime.now().format(dtf);
-
-        System.out.println(date);
-
-        String idTransaksi = "PULSA" + date + "001";
-        String lastRow = idTransaksi.substring(idTransaksi.length() - 3);
-        String dateTimePrevious = idTransaksi.substring(idTransaksi.length() - 13, idTransaksi.length() - 3);
-        System.out.println("dateTimePrevious: " + dateTimePrevious);
-        System.out.println(lastRow);
-
-        System.out.println(String.format("%03d", 30));
+//        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("ddMMyyHHmm");
+//        String date = LocalDateTime.now().format(dtf);
+//
+//        System.out.println(date);
+//
+//        String idTransaksi = "PULSA" + date + "001";
+//        String lastRow = idTransaksi.substring(idTransaksi.length() - 3);
+//        String dateTimePrevious = idTransaksi.substring(idTransaksi.length() - 13, idTransaksi.length() - 3);
+//        System.out.println("dateTimePrevious: " + dateTimePrevious);
+//        System.out.println(lastRow);
+//
+//        System.out.println(String.format("%03d", 30));
 //
 //        String idTrans = transaksiService.getFormatIdTransaksi("TOP_UP");
 //        System.out.println(idTrans);
@@ -70,6 +75,11 @@ class AdianestPaymentAppApplicationTests {
 //        } catch (Exception e) {
 //            e.printStackTrace();
 //        }
+
+//        UserDto dto = new UserDto();
+//        dto.setIdUser("user-002");
+//
+//        userService.updateUser(dto);
 
 
     }
