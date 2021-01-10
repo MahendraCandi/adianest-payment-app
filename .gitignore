@@ -34,3 +34,5 @@ build/
 
 ### project ###
 logs
+./user
+./src/main/resources/fcm/
