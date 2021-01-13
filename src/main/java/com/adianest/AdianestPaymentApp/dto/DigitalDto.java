@@ -13,6 +13,15 @@ public class DigitalDto {
     private String nominalTransfer;
     private String nomorTujuan;
     private String idUser;
+    private String namaPaket;
+
+    public String getNamaPaket() {
+        return namaPaket;
+    }
+
+    public void setNamaPaket(String namaPaket) {
+        this.namaPaket = namaPaket;
+    }
 
     public String getIdPaket() {
         return idPaket;

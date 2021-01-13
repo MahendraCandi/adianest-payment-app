@@ -9,6 +9,24 @@ public class SmsDto {
     private String harga;
     private String nomorTujuan;
     private String idUser;
+    private String transaksiId;
+    private String namaPaket;
+
+    public String getNamaPaket() {
+        return namaPaket;
+    }
+
+    public void setNamaPaket(String namaPaket) {
+        this.namaPaket = namaPaket;
+    }
+
+    public String getTransaksiId() {
+        return transaksiId;
+    }
+
+    public void setTransaksiId(String transaksiId) {
+        this.transaksiId = transaksiId;
+    }
 
     public String getIdPaket() {
         return idPaket;

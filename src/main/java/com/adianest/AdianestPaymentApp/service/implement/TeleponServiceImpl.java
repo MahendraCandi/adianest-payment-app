@@ -74,4 +74,19 @@ public class TeleponServiceImpl implements ITeleponService {
 
         return newSaldo != null;
     }
+
+    @Override
+    public TeleponDto getTransaksiByIdTransaksi(String idTransaksi) {
+        TransaksiTelepon t = teleponDao.findById(idTransaksi).orElse(null);
+        TeleponDto dto = new TeleponDto();
+        if (t != null) {
+            KategoriTelepon k = kategoriTeleponDao.findById(t.getPaketTelepon()).orElse(new KategoriTelepon());
+            dto.setTransaksiId(t.getTransaksiId());
+            dto.setNomorTujuan(t.getNomorTujuan());
+            dto.setIdPaket(t.getPaketTelepon());
+            dto.setHarga(t.getHargaPaket().setScale(0, BigDecimal.ROUND_FLOOR).toString());
+            dto.setNamaPaket(k.getSesamaOperator() + " MENIT");
+        }
+        return dto;
+    }
 }

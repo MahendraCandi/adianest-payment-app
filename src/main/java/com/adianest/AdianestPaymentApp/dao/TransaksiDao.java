@@ -16,5 +16,7 @@ public interface TransaksiDao extends JpaRepository<Transaksi, String> {
 
     Optional<Transaksi> findTopByIdStartsWithOrderByIdDesc(String prefix);
 
+    Optional<Transaksi> findTopByIdStartsWithOrderByTglTransaksiDesc(String prefix);
+
     List<Transaksi> findAllByUserIdOrderByTglTransaksiDesc(String idUser);
 }

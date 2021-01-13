@@ -9,4 +9,6 @@ public interface IPulsaService {
     List<PulsaDto> getAllKategori();
 
     boolean insertTransaksi(PulsaDto dto);
+
+    PulsaDto getTransaksiByIdTransaksi(String idTransaksi);
 }

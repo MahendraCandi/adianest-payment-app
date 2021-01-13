@@ -1,16 +1,10 @@
 package com.adianest.AdianestPaymentApp.service.implement;
 
 import com.adianest.AdianestPaymentApp.common.AppCommonUtil;
-import com.adianest.AdianestPaymentApp.dto.HistoryDto;
-import com.adianest.AdianestPaymentApp.dto.InternetDto;
-import com.adianest.AdianestPaymentApp.dto.SmsDto;
-import com.adianest.AdianestPaymentApp.dto.TopUpDto;
+import com.adianest.AdianestPaymentApp.dto.*;
 import com.adianest.AdianestPaymentApp.model.EnumKategoriTransaksi;
 import com.adianest.AdianestPaymentApp.model.Transaksi;
-import com.adianest.AdianestPaymentApp.service.IHistoryService;
-import com.adianest.AdianestPaymentApp.service.IInternetService;
-import com.adianest.AdianestPaymentApp.service.ITopUpService;
-import com.adianest.AdianestPaymentApp.service.ITransaksiService;
+import com.adianest.AdianestPaymentApp.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +26,18 @@ public class HistoryServiceImpl implements IHistoryService {
 
     @Autowired
     IInternetService internetService;
+
+    @Autowired
+    IPulsaService pulsaService;
+
+    @Autowired
+    ISmsService smsService;
+
+    @Autowired
+    ITeleponService teleponService;
+
+    @Autowired
+    IDigitalService digitalService;
 
     @SuppressWarnings("unchecked")
     @Override
@@ -61,6 +67,58 @@ public class HistoryServiceImpl implements IHistoryService {
                     String deskripsi = String
                             .format("Pembelian paket data %s ke no. %s berhasil, harga Rp. %s",
                                     internetDto.getNamaPaket(), internetDto.getNomorTujuan(),
+                                    AppCommonUtil.toRupiahFormat(dto.getTotalTransaksi()));
+                    dto.setDeskripsi(deskripsi);
+                    dtos.add(dto);
+                } else if (t.getKategori().equals(EnumKategoriTransaksi.PULSA_REGULER.name())) {
+                    PulsaDto pulsaDto = pulsaService.getTransaksiByIdTransaksi(t.getId());
+                    HistoryDto<PulsaDto> dto = new HistoryDto<>();
+                    dto.setDetailTransaksi(pulsaDto);
+                    setTransaksi(dto, t);
+
+                    String deskripsi = String
+                            .format("Pembelian paket pulsa %s ke no. %s berhasil, harga Rp. %s",
+                                    pulsaDto.getJumlah(), pulsaDto.getNomorTujuan(),
+                                    AppCommonUtil.toRupiahFormat(dto.getTotalTransaksi()));
+                    dto.setDeskripsi(deskripsi);
+                    dtos.add(dto);
+                } else if (t.getKategori().equals(EnumKategoriTransaksi.SMS.name())) {
+                    SmsDto smsDto = smsService.getTransaksiByIdTransaksi(t.getId());
+                    HistoryDto<SmsDto> dto = new HistoryDto<>();
+                    dto.setDetailTransaksi(smsDto);
+                    setTransaksi(dto, t);
+
+                    String deskripsi = String
+                            .format("Pembelian paket %s ke no. %s berhasil, harga Rp. %s",
+                                    smsDto.getNamaPaket(), smsDto.getNomorTujuan(),
+                                    AppCommonUtil.toRupiahFormat(dto.getTotalTransaksi()));
+                    dto.setDeskripsi(deskripsi);
+                    dtos.add(dto);
+                } else if (t.getKategori().equals(EnumKategoriTransaksi.TELEPON.name())) {
+                    TeleponDto teleponDto = teleponService.getTransaksiByIdTransaksi(t.getId());
+                    HistoryDto<TeleponDto> dto = new HistoryDto<>();
+                    dto.setDetailTransaksi(teleponDto);
+                    setTransaksi(dto, t);
+
+                    String deskripsi = String
+                            .format("Pembelian paket data %s ke no. %s berhasil, harga Rp. %s",
+                                    teleponDto.getNamaPaket(), teleponDto.getNomorTujuan(),
+                                    AppCommonUtil.toRupiahFormat(dto.getTotalTransaksi()));
+                    dto.setDeskripsi(deskripsi);
+                    dtos.add(dto);
+                } else if (t.getKategori().equals(EnumKategoriTransaksi.GOPAY.name()) ||
+                        t.getKategori().equals(EnumKategoriTransaksi.DANA.name()) ||
+                        t.getKategori().equals(EnumKategoriTransaksi.GRAB.name()) ||
+                        t.getKategori().equals(EnumKategoriTransaksi.OVO.name()) ||
+                        t.getKategori().equals(EnumKategoriTransaksi.SHOOPE_PAY.name())) {
+                    DigitalDto digitalDto = digitalService.getTransaksiByIdTransaksi(t.getId());
+                    HistoryDto<DigitalDto> dto = new HistoryDto<>();
+                    dto.setDetailTransaksi(digitalDto);
+                    setTransaksi(dto, t);
+
+                    String deskripsi = String
+                            .format("Pembelian paket %s ke no. %s berhasil, harga Rp. %s",
+                                    digitalDto.getNamaPaket(), digitalDto.getNomorTujuan(),
                                     AppCommonUtil.toRupiahFormat(dto.getTotalTransaksi()));
                     dto.setDeskripsi(deskripsi);
                     dtos.add(dto);

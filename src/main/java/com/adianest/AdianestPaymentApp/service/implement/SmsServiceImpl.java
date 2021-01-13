@@ -75,4 +75,19 @@ public class SmsServiceImpl implements ISmsService {
 
         return newSaldo != null;
     }
+
+    @Override
+    public SmsDto getTransaksiByIdTransaksi(String idTransaksi) {
+        TransaksiSms sms = smsDao.findById(idTransaksi).orElse(null);
+        SmsDto dto = new SmsDto();
+        if (sms != null) {
+            KategoriSms k = kategoriSmsDao.findById(sms.getPaketSms()).orElse(new KategoriSms());
+            dto.setTransaksiId(sms.getTransaksiId());
+            dto.setNomorTujuan(sms.getNomorTujuan());
+            dto.setIdPaket(sms.getPaketSms());
+            dto.setNamaPaket(k.getSamaOperator() + " SMS");
+            dto.setHarga(sms.getHargaPaket().setScale(0, BigDecimal.ROUND_FLOOR).toString());
+        }
+        return dto;
+    }
 }

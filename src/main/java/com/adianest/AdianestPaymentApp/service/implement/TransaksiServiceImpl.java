@@ -49,7 +49,7 @@ public class TransaksiServiceImpl implements ITransaksiService {
         LocalDateTime now = LocalDateTime.now();
         String date = now.format(dtf);
 
-        Transaksi transaksi = transaksiDao.findTopByIdStartsWithOrderByIdDesc(prefix).orElse(null);
+        Transaksi transaksi = transaksiDao.findTopByIdStartsWithOrderByTglTransaksiDesc(prefix).orElse(null);
 
         String formatId;
         if (transaksi == null) {

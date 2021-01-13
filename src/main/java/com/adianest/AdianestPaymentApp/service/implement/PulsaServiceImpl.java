@@ -75,4 +75,17 @@ public class PulsaServiceImpl implements IPulsaService {
 
         return newSaldo.getId() != null;
     }
+
+    @Override
+    public PulsaDto getTransaksiByIdTransaksi(String idTransaksi) {
+        TransaksiPulsa tp = transaksiPulsaDao.findById(idTransaksi).orElse(null);
+        PulsaDto dto = new PulsaDto();
+        if (tp != null) {
+            dto.setIdTransaksi(tp.getTransaksiId());
+            dto.setNomorDari(tp.getNomorDari());
+            dto.setNomorTujuan(tp.getNomorTujuan());
+            dto.setJumlah(tp.getJumlahPulsa().setScale(0, BigDecimal.ROUND_FLOOR).toString());
+        }
+        return dto;
+    }
 }
