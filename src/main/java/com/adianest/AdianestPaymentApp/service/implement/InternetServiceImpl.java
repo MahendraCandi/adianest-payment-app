@@ -7,13 +7,10 @@ package com.adianest.AdianestPaymentApp.service.implement;
 import com.adianest.AdianestPaymentApp.dao.KategoriInternetDao;
 import com.adianest.AdianestPaymentApp.dao.TransaksiPaketInternetDao;
 import com.adianest.AdianestPaymentApp.dto.InternetDto;
-import com.adianest.AdianestPaymentApp.model.EnumKategoriTransaksi;
-import com.adianest.AdianestPaymentApp.model.KategoriInternet;
-import com.adianest.AdianestPaymentApp.model.Saldo;
-import com.adianest.AdianestPaymentApp.model.TransaksiPaketInternet;
-import com.adianest.AdianestPaymentApp.service.IInternetService;
-import com.adianest.AdianestPaymentApp.service.ISaldo;
-import com.adianest.AdianestPaymentApp.service.ITransaksiService;
+import com.adianest.AdianestPaymentApp.fcm.PushNotificationRequest;
+import com.adianest.AdianestPaymentApp.fcm.PushNotificationService;
+import com.adianest.AdianestPaymentApp.model.*;
+import com.adianest.AdianestPaymentApp.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,7 +33,16 @@ public class InternetServiceImpl implements IInternetService {
     ITransaksiService transaksiService;
 
     @Autowired
+    PushNotificationService push;
+
+    @Autowired
+    IFcmService fcmService;
+
+    @Autowired
     ISaldo saldoService;
+
+    @Autowired
+    INotifikasi notifikasiService;
 
     @Override
     public List<InternetDto> getAllPaketInternet() {
@@ -70,13 +76,29 @@ public class InternetServiceImpl implements IInternetService {
 
         internetDao.save(internet);
 
-        transaksiService.insertTransaction(
+        Transaksi t = transaksiService.insertTransaction(
                 transaksiId,
                 EnumKategoriTransaksi.PAKET_INTERNET.name(),
                 dto.getIdUser(),
                 hargaPaket);
 
         Saldo newSaldo = saldoService.insertSaldo(dto.getIdUser(), hargaPaket.negate());
+
+        KategoriInternet k = kategoriInternetDao.findById(internet.getPaketKuota()).orElse(new KategoriInternet());
+
+        PushNotificationRequest req = new PushNotificationRequest();
+        req.setTitle("Adianest Info");
+        StringBuilder builder = new StringBuilder();
+        builder.append("Terima kasih, pembelian paket data ")
+                .append(k.getNama() == null ? "-" : k.getNama())
+                .append(" ")
+                .append(transaksiId)
+                .append(" berhasil dilakukan");
+        req.setMessage(builder.toString());
+        req.setToken(fcmService.getToken(dto.getIdUser()));
+        push.sendPushNotificationToToken(req);
+
+        notifikasiService.insertNotifikasi(t.getUserId(), t.getId(), t.getKategori(), builder.toString(), t.getTglTransaksi());
 
         return newSaldo.getId() != null;
     }

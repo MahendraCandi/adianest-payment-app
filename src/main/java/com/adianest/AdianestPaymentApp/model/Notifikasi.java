@@ -1,6 +1,7 @@
 package com.adianest.AdianestPaymentApp.model;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.util.Objects;
 
 @Entity
@@ -11,6 +12,7 @@ public class Notifikasi {
     private String transaksiId;
     private String transaksiKategori;
     private String message;
+    private Timestamp tglTransaksi;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -73,6 +75,16 @@ public class Notifikasi {
         this.message = message;
     }
 
+    @Basic
+    @Column(name = "tgl_transaksi", nullable = true)
+    public Timestamp getTglTransaksi() {
+        return tglTransaksi;
+    }
+
+    public void setTglTransaksi(Timestamp tglTransaksi) {
+        this.tglTransaksi = tglTransaksi;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -83,11 +95,12 @@ public class Notifikasi {
                 Objects.equals(status, that.status) &&
                 Objects.equals(transaksiId, that.transaksiId) &&
                 Objects.equals(transaksiKategori, that.transaksiKategori) &&
-                Objects.equals(message, that.message);
+                Objects.equals(message, that.message) &&
+                Objects.equals(tglTransaksi, that.tglTransaksi);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, userId, status, transaksiId, transaksiKategori, message);
+        return Objects.hash(id, userId, status, transaksiId, transaksiKategori, message, tglTransaksi);
     }
 }

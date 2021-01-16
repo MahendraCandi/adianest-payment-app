@@ -4,10 +4,10 @@ import com.adianest.AdianestPaymentApp.common.AppCommonUtil;
 import com.adianest.AdianestPaymentApp.dao.KategoriPulsaDao;
 import com.adianest.AdianestPaymentApp.dao.TransaksiPulsaDao;
 import com.adianest.AdianestPaymentApp.dto.PulsaDto;
+import com.adianest.AdianestPaymentApp.fcm.PushNotificationRequest;
+import com.adianest.AdianestPaymentApp.fcm.PushNotificationService;
 import com.adianest.AdianestPaymentApp.model.*;
-import com.adianest.AdianestPaymentApp.service.IPulsaService;
-import com.adianest.AdianestPaymentApp.service.ISaldo;
-import com.adianest.AdianestPaymentApp.service.ITransaksiService;
+import com.adianest.AdianestPaymentApp.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,6 +31,15 @@ public class PulsaServiceImpl implements IPulsaService {
 
     @Autowired
     ISaldo saldoService;
+
+    @Autowired
+    PushNotificationService push;
+
+    @Autowired
+    IFcmService fcmService;
+
+    @Autowired
+    INotifikasi notifikasiService;
 
     @Override
     public List<PulsaDto> getAllKategori() {
@@ -65,13 +74,27 @@ public class PulsaServiceImpl implements IPulsaService {
 
         transaksiPulsaDao.save(tp);
 
-        transaksiService.insertTransaction(
+        Transaksi t = transaksiService.insertTransaction(
                 transaksiId,
                 EnumKategoriTransaksi.PULSA_REGULER.name(),
                 dto.getIdUser(),
                 hargaPaket);
 
         Saldo newSaldo = saldoService.insertSaldo(dto.getIdUser(), hargaPaket.negate());
+
+        PushNotificationRequest req = new PushNotificationRequest();
+        req.setTitle("Adianest Info");
+        StringBuilder builder = new StringBuilder();
+        builder.append("Terima kasih, pembelian paket pulsa ")
+                .append(dto.getJumlah())
+                .append(" ")
+                .append(transaksiId)
+                .append(" berhasil dilakukan");
+        req.setMessage(builder.toString());
+        req.setToken(fcmService.getToken(dto.getIdUser()));
+        push.sendPushNotificationToToken(req);
+
+        notifikasiService.insertNotifikasi(t.getUserId(), t.getId(), t.getKategori(), builder.toString(), t.getTglTransaksi());
 
         return newSaldo.getId() != null;
     }

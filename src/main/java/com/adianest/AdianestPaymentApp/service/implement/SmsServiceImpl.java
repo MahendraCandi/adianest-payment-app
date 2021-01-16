@@ -3,13 +3,10 @@ package com.adianest.AdianestPaymentApp.service.implement;
 import com.adianest.AdianestPaymentApp.dao.KategoriSmsDao;
 import com.adianest.AdianestPaymentApp.dao.TransaksiSmsDao;
 import com.adianest.AdianestPaymentApp.dto.SmsDto;
-import com.adianest.AdianestPaymentApp.model.EnumKategoriTransaksi;
-import com.adianest.AdianestPaymentApp.model.KategoriSms;
-import com.adianest.AdianestPaymentApp.model.Saldo;
-import com.adianest.AdianestPaymentApp.model.TransaksiSms;
-import com.adianest.AdianestPaymentApp.service.ISaldo;
-import com.adianest.AdianestPaymentApp.service.ISmsService;
-import com.adianest.AdianestPaymentApp.service.ITransaksiService;
+import com.adianest.AdianestPaymentApp.fcm.PushNotificationRequest;
+import com.adianest.AdianestPaymentApp.fcm.PushNotificationService;
+import com.adianest.AdianestPaymentApp.model.*;
+import com.adianest.AdianestPaymentApp.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,6 +29,15 @@ public class SmsServiceImpl implements ISmsService {
 
     @Autowired
     private ISaldo saldoService;
+
+    @Autowired
+    private PushNotificationService push;
+
+    @Autowired
+    private IFcmService fcmService;
+
+    @Autowired
+    private INotifikasi notifikasiService;
 
     @Override
     public List<SmsDto> getAllPacket() {
@@ -65,13 +71,29 @@ public class SmsServiceImpl implements ISmsService {
 
         smsDao.save(ts);
 
-        transaksiService.insertTransaction(
+        Transaksi t = transaksiService.insertTransaction(
                 transaksiId,
                 EnumKategoriTransaksi.SMS.name(),
                 dto.getIdUser(),
                 harga);
 
         Saldo newSaldo = saldoService.insertSaldo(dto.getIdUser(), harga.negate());
+
+        KategoriSms k = kategoriSmsDao.findById(ts.getPaketSms()).orElse(new KategoriSms());
+
+        PushNotificationRequest req = new PushNotificationRequest();
+        req.setTitle("Adianest Info");
+        StringBuilder builder = new StringBuilder();
+        builder.append("Terima kasih, pembelian paket")
+                .append(k.getSamaOperator())
+                .append(" SMS ")
+                .append(transaksiId)
+                .append(" berhasil dilakukan");
+        req.setMessage(builder.toString());
+        req.setToken(fcmService.getToken(dto.getIdUser()));
+        push.sendPushNotificationToToken(req);
+
+        notifikasiService.insertNotifikasi(t.getUserId(), t.getId(), t.getKategori(), builder.toString(), t.getTglTransaksi());
 
         return newSaldo != null;
     }

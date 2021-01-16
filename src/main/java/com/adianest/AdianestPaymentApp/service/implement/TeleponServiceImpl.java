@@ -3,10 +3,10 @@ package com.adianest.AdianestPaymentApp.service.implement;
 import com.adianest.AdianestPaymentApp.dao.KategoriTeleponDao;
 import com.adianest.AdianestPaymentApp.dao.TransaksiTeleponDao;
 import com.adianest.AdianestPaymentApp.dto.TeleponDto;
+import com.adianest.AdianestPaymentApp.fcm.PushNotificationRequest;
+import com.adianest.AdianestPaymentApp.fcm.PushNotificationService;
 import com.adianest.AdianestPaymentApp.model.*;
-import com.adianest.AdianestPaymentApp.service.ISaldo;
-import com.adianest.AdianestPaymentApp.service.ITeleponService;
-import com.adianest.AdianestPaymentApp.service.ITransaksiService;
+import com.adianest.AdianestPaymentApp.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +29,15 @@ public class TeleponServiceImpl implements ITeleponService {
 
     @Autowired
     private ISaldo saldoService;
+
+    @Autowired
+    private PushNotificationService push;
+
+    @Autowired
+    private IFcmService fcmService;
+
+    @Autowired
+    private INotifikasi notifikasiService;
 
     @Override
     public List<TeleponDto> getAllPaket() {
@@ -64,13 +73,30 @@ public class TeleponServiceImpl implements ITeleponService {
 
         teleponDao.save(ts);
 
-        transaksiService.insertTransaction(
+        Transaksi t = transaksiService.insertTransaction(
                 transaksiId,
                 EnumKategoriTransaksi.TELEPON.name(),
                 dto.getIdUser(),
                 harga);
 
         Saldo newSaldo = saldoService.insertSaldo(dto.getIdUser(), harga.negate());
+
+        KategoriTelepon k = kategoriTeleponDao.findById(ts.getPaketTelepon()).orElse(new KategoriTelepon());
+
+        PushNotificationRequest req = new PushNotificationRequest();
+        req.setTitle("Adianest Info");
+        StringBuilder builder = new StringBuilder();
+        builder.append("Terima kasih, pembelian paket")
+                .append(k.getSesamaOperator())
+                .append(" MENIT ")
+                .append(transaksiId)
+                .append(" berhasil dilakukan");
+        req.setMessage(builder.toString());
+        req.setToken(fcmService.getToken(dto.getIdUser()));
+        push.sendPushNotificationToToken(req);
+
+        notifikasiService.insertNotifikasi(t.getUserId(), t.getId(), t.getKategori(), builder.toString(), t.getTglTransaksi());
+
 
         return newSaldo != null;
     }

@@ -1,5 +1,6 @@
 package com.adianest.AdianestPaymentApp.controller;
 
+import com.adianest.AdianestPaymentApp.dto.NotifikasiDto;
 import com.adianest.AdianestPaymentApp.fcm.PushNotificationRequest;
 import com.adianest.AdianestPaymentApp.fcm.PushNotificationResponse;
 import com.adianest.AdianestPaymentApp.fcm.PushNotificationService;
@@ -10,7 +11,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/notification")
@@ -42,7 +46,18 @@ public class PushNotificationController {
     }
 
     @PostMapping("/all")
-    public List<Notifikasi> getAllNotifikasiByIdUser(@RequestParam("id") String idUser) {
-        return notifikasiService.getAllByUserId(idUser);
+    public List<NotifikasiDto> getAllNotifikasiByIdUser(@RequestParam("id") String idUser) {
+        return notifikasiService.getAllByUserId(idUser)
+                .stream()
+                .map(p -> new NotifikasiDto(
+                        p.getId(),
+                        p.getUserId(),
+                        p.getStatus().toString(),
+                        p.getTransaksiId(),
+                        p.getTransaksiKategori(),
+                        p.getMessage(),
+                        p.getTglTransaksi().toLocalDateTime()
+                                .format(DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale.forLanguageTag("id-ID")))))
+                .collect(Collectors.toList());
     }
 }

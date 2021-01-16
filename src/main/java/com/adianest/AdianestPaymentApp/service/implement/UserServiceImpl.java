@@ -12,6 +12,7 @@ import com.adianest.AdianestPaymentApp.model.Photo;
 import com.adianest.AdianestPaymentApp.model.Saldo;
 import com.adianest.AdianestPaymentApp.model.User;
 import com.adianest.AdianestPaymentApp.model.UserAuthorities;
+import com.adianest.AdianestPaymentApp.service.INotifikasi;
 import com.adianest.AdianestPaymentApp.service.ISaldo;
 import com.adianest.AdianestPaymentApp.service.IUserAuthorities;
 import com.adianest.AdianestPaymentApp.service.IUserService;
@@ -41,6 +42,9 @@ public class UserServiceImpl implements IUserService {
 
     @Autowired
     private ISaldo saldoService;
+
+    @Autowired
+    private INotifikasi notifikasiService;
 
     private static final Logger log = LogManager.getLogger(UserServiceImpl.class);
 
@@ -110,6 +114,8 @@ public class UserServiceImpl implements IUserService {
                 userDto.setNameAuthorities(obj[5].toString());
                 userDto.setPasswordUser(obj[6].toString());
                 userDto.setIdPhoto(obj[7] == null ? null : obj[7].toString());
+
+                userDto.setTotalUnreadNotif(String.valueOf(notifikasiService.getAllByUserId(userDto.getIdUser()).size()));
             }
         }
 

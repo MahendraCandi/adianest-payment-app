@@ -22,6 +22,15 @@ public class UserDto {
     private String idPhoto;
     private String pathPhoto;
     private String namaPhoto;
+    private String totalUnreadNotif;
+
+    public String getTotalUnreadNotif() {
+        return totalUnreadNotif;
+    }
+
+    public void setTotalUnreadNotif(String totalUnreadNotif) {
+        this.totalUnreadNotif = totalUnreadNotif;
+    }
 
     public String getNameAuthorities() {
         return nameAuthorities;

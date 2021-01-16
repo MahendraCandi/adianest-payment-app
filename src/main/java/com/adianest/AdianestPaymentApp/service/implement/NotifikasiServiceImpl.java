@@ -8,6 +8,8 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -25,20 +27,21 @@ public class NotifikasiServiceImpl implements INotifikasi {
     }
 
     @Override
-    public boolean insertNotifikasi(String userId, String transaksiId, String transaksiKategori, String message) {
+    public boolean insertNotifikasi(String userId, String transaksiId, String transaksiKategori, String message, Timestamp tglTransaksi) {
         Notifikasi n = new Notifikasi();
         n.setUserId(userId);
         n.setTransaksiId(transaksiId);
         n.setStatus(0);
         n.setTransaksiKategori(transaksiKategori);
         n.setMessage(message);
+        n.setTglTransaksi(tglTransaksi);
 
         return insertNotifikasi(n);
     }
 
     @Override
     public List<Notifikasi> getAllByUserId(String userId) {
-        return notifikasiDao.findAllByUserId(userId).orElse(null);
+        return notifikasiDao.findAllByUserIdAndStatusIs(userId, 0).orElse(new ArrayList<>());
     }
 
     @Override

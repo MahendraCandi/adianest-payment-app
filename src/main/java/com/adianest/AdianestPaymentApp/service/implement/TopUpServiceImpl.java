@@ -4,14 +4,15 @@
 
 package com.adianest.AdianestPaymentApp.service.implement;
 
+import com.adianest.AdianestPaymentApp.common.AppCommonUtil;
 import com.adianest.AdianestPaymentApp.dao.KategoriTopUpDao;
 import com.adianest.AdianestPaymentApp.dao.TopUpDao;
 import com.adianest.AdianestPaymentApp.dao.TransaksiTopUpConfirmDao;
 import com.adianest.AdianestPaymentApp.dto.TopUpDto;
+import com.adianest.AdianestPaymentApp.fcm.PushNotificationRequest;
+import com.adianest.AdianestPaymentApp.fcm.PushNotificationService;
 import com.adianest.AdianestPaymentApp.model.*;
-import com.adianest.AdianestPaymentApp.service.ISaldo;
-import com.adianest.AdianestPaymentApp.service.ITopUpService;
-import com.adianest.AdianestPaymentApp.service.ITransaksiService;
+import com.adianest.AdianestPaymentApp.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,6 +37,14 @@ public class TopUpServiceImpl implements ITopUpService {
     @Autowired
     private ISaldo saldoService;
 
+    @Autowired
+    private PushNotificationService push;
+
+    @Autowired
+    private IFcmService fcmService;
+
+    @Autowired
+    private INotifikasi notifikasiService;
 
     @Transactional( rollbackFor = Exception.class)
     @Override
@@ -50,7 +59,7 @@ public class TopUpServiceImpl implements ITopUpService {
 
             topUpDao.save(topup);
 
-            transaksiService.insertTransaction(dto.getTransaksiId(), dto.getKategoriTransaksi(), dto.getUserId(),
+            Transaksi t = transaksiService.insertTransaction(dto.getTransaksiId(), dto.getKategoriTransaksi(), dto.getUserId(),
                     new BigDecimal(dto.getTotalAmount()).setScale(2, BigDecimal.ROUND_FLOOR));
 
             Saldo newSaldo = saldoService.insertSaldo(dto.getUserId(),
@@ -65,6 +74,21 @@ public class TopUpServiceImpl implements ITopUpService {
             TransaksiTopupConfirm topupConfirm = topUpConfirmDao.findById(pk).orElseThrow(NullPointerException::new);
             topupConfirm.setKonfirmasiTransaksi(true);
             topUpConfirmDao.save(topupConfirm);
+
+            PushNotificationRequest req = new PushNotificationRequest();
+            req.setTitle("Adianest Info");
+            StringBuilder builder = new StringBuilder();
+            builder.append("Terima kasih, top up melalui ")
+                    .append(AppCommonUtil.firstCharacterToUpperCase(dto.getKategoriTopUp()))
+                    .append(" sebesar ")
+                    .append(AppCommonUtil.toRupiahFormat(dto.getNominalTopUp()))
+                    .append(" berhasil dilakukan");
+            req.setMessage(builder.toString());
+            req.setToken(fcmService.getToken(dto.getUserId()));
+            push.sendPushNotificationToToken(req);
+
+            notifikasiService.insertNotifikasi(t.getUserId(), t.getId(), t.getKategori(), builder.toString(), t.getTglTransaksi());
+
 
             return newSaldo.getId() != null;
 

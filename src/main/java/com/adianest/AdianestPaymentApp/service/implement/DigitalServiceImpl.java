@@ -7,10 +7,7 @@ import com.adianest.AdianestPaymentApp.dto.DigitalDto;
 import com.adianest.AdianestPaymentApp.fcm.PushNotificationRequest;
 import com.adianest.AdianestPaymentApp.fcm.PushNotificationService;
 import com.adianest.AdianestPaymentApp.model.*;
-import com.adianest.AdianestPaymentApp.service.IDigitalService;
-import com.adianest.AdianestPaymentApp.service.IFcmService;
-import com.adianest.AdianestPaymentApp.service.ISaldo;
-import com.adianest.AdianestPaymentApp.service.ITransaksiService;
+import com.adianest.AdianestPaymentApp.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,6 +37,9 @@ public class DigitalServiceImpl implements IDigitalService {
 
     @Autowired
     IFcmService fcmService;
+
+    @Autowired
+    private INotifikasi notifikasiService;
 
     @Override
     public List<DigitalDto> getAllKategori() {
@@ -101,7 +101,7 @@ public class DigitalServiceImpl implements IDigitalService {
 
         digitalDao.save(td);
 
-        transaksiService.insertTransaction(
+        Transaksi t = transaksiService.insertTransaction(
                 transaksiId,
                 kategori,
                 dto.getIdUser(),
@@ -120,6 +120,8 @@ public class DigitalServiceImpl implements IDigitalService {
         req.setMessage(builder.toString());
         req.setToken(fcmService.getToken(dto.getIdUser()));
         push.sendPushNotificationToToken(req);
+
+        notifikasiService.insertNotifikasi(t.getUserId(), t.getId(), t.getKategori(), builder.toString(), t.getTglTransaksi());
 
         return newSaldo.getId() != null;
     }
