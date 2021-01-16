@@ -76,4 +76,9 @@ public class TransaksiServiceImpl implements ITransaksiService {
     public List<Transaksi> getAllTransaksiByIdUser(String idUser) {
         return transaksiDao.findAllByUserIdOrderByTglTransaksiDesc(idUser);
     }
+
+    @Override
+    public Transaksi getTransaksiByIdTransaksi(String idTransaksi) {
+        return transaksiDao.findById(idTransaksi).orElse(new Transaksi());
+    }
 }

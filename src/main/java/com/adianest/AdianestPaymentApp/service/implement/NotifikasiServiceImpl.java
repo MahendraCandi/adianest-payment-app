@@ -7,6 +7,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ public class NotifikasiServiceImpl implements INotifikasi {
     @Autowired
     private NotifikasiDao notifikasiDao;
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public boolean insertNotifikasi(Notifikasi notifikasi) {
         Notifikasi n = notifikasiDao.save(notifikasi);
@@ -41,9 +43,10 @@ public class NotifikasiServiceImpl implements INotifikasi {
 
     @Override
     public List<Notifikasi> getAllByUserId(String userId) {
-        return notifikasiDao.findAllByUserIdAndStatusIs(userId, 0).orElse(new ArrayList<>());
+        return notifikasiDao.findAllByUserId(userId).orElse(new ArrayList<>());
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public boolean updateAllNotifikasiByUserId(String userId) {
         List<Notifikasi> all = getAllByUserId(userId);
@@ -58,6 +61,20 @@ public class NotifikasiServiceImpl implements INotifikasi {
             logger.error("update all notifikasi failed", e);
         }
 
+        return result;
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public boolean updateNotifikasiByIdTransaksi(String idTransaksi) {
+        Notifikasi n = notifikasiDao.findByTransaksiId(idTransaksi).orElse(null);
+        boolean result = false;
+
+        if (n != null) {
+            n.setStatus(1);
+            notifikasiDao.save(n);
+            result = true;
+        }
         return result;
     }
 }

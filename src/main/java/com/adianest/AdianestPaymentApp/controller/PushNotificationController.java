@@ -4,7 +4,6 @@ import com.adianest.AdianestPaymentApp.dto.NotifikasiDto;
 import com.adianest.AdianestPaymentApp.fcm.PushNotificationRequest;
 import com.adianest.AdianestPaymentApp.fcm.PushNotificationResponse;
 import com.adianest.AdianestPaymentApp.fcm.PushNotificationService;
-import com.adianest.AdianestPaymentApp.model.Notifikasi;
 import com.adianest.AdianestPaymentApp.service.INotifikasi;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
@@ -58,6 +58,12 @@ public class PushNotificationController {
                         p.getMessage(),
                         p.getTglTransaksi().toLocalDateTime()
                                 .format(DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale.forLanguageTag("id-ID")))))
+                .sorted(Comparator.comparingInt(NotifikasiDto::getId).reversed())
                 .collect(Collectors.toList());
+    }
+
+    @PostMapping("/update")
+    public boolean updateToReadByIdUser(@RequestParam("idTransaksi") String idTransaksi) {
+        return notifikasiService.updateNotifikasiByIdTransaksi(idTransaksi);
     }
 }

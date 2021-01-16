@@ -86,7 +86,7 @@ public class TeleponServiceImpl implements ITeleponService {
         PushNotificationRequest req = new PushNotificationRequest();
         req.setTitle("Adianest Info");
         StringBuilder builder = new StringBuilder();
-        builder.append("Terima kasih, pembelian paket")
+        builder.append("Terima kasih, pembelian paket ")
                 .append(k.getSesamaOperator())
                 .append(" MENIT ")
                 .append(transaksiId)

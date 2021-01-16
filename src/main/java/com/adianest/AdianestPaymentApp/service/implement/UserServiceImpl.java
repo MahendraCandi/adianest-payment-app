@@ -115,7 +115,11 @@ public class UserServiceImpl implements IUserService {
                 userDto.setPasswordUser(obj[6].toString());
                 userDto.setIdPhoto(obj[7] == null ? null : obj[7].toString());
 
-                userDto.setTotalUnreadNotif(String.valueOf(notifikasiService.getAllByUserId(userDto.getIdUser()).size()));
+                userDto.setTotalUnreadNotif(
+                        String.valueOf(
+                                notifikasiService.getAllByUserId(userDto.getIdUser())
+                                        .stream()
+                                        .filter(p -> p.getStatus() == 0).count()));
             }
         }
 

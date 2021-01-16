@@ -11,4 +11,8 @@ import java.util.Optional;
 public interface NotifikasiDao extends JpaRepository<Notifikasi, Integer> {
 
     Optional<List<Notifikasi>> findAllByUserIdAndStatusIs(String userId, Integer status);
+
+    Optional<List<Notifikasi>> findAllByUserId(String userId);
+
+    Optional<Notifikasi> findByTransaksiId(String idTransaksi);
 }

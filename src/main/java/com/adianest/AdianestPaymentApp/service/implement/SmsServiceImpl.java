@@ -84,7 +84,7 @@ public class SmsServiceImpl implements ISmsService {
         PushNotificationRequest req = new PushNotificationRequest();
         req.setTitle("Adianest Info");
         StringBuilder builder = new StringBuilder();
-        builder.append("Terima kasih, pembelian paket")
+        builder.append("Terima kasih, pembelian paket ")
                 .append(k.getSamaOperator())
                 .append(" SMS ")
                 .append(transaksiId)

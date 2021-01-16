@@ -16,4 +16,6 @@ public interface ITransaksiService {
     String getFormatIdTransaksi(String kategoriTransaksi);
 
     List<Transaksi> getAllTransaksiByIdUser(String IdUser);
+
+    Transaksi getTransaksiByIdTransaksi(String idTransaksi);
 }

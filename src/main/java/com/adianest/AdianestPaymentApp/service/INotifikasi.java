@@ -14,4 +14,6 @@ public interface INotifikasi {
     List<Notifikasi> getAllByUserId(String userId);
 
     boolean updateAllNotifikasiByUserId(String userId);
+
+    boolean updateNotifikasiByIdTransaksi(String idTransaksi);
 }

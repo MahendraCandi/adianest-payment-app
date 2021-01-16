@@ -86,7 +86,7 @@ public class PulsaServiceImpl implements IPulsaService {
         req.setTitle("Adianest Info");
         StringBuilder builder = new StringBuilder();
         builder.append("Terima kasih, pembelian paket pulsa ")
-                .append(dto.getJumlah())
+                .append(dto.getIdPaket())
                 .append(" ")
                 .append(transaksiId)
                 .append(" berhasil dilakukan");
