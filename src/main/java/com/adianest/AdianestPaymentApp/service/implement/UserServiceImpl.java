@@ -102,7 +102,7 @@ public class UserServiceImpl implements IUserService {
     @Override
     public UserDto getOneUserByNoTelpon(String noTelpon) {
         List<Object[]> objects = userDao.findUserAndAuthoritiesByNoTelpon(noTelpon);
-        UserDto userDto = null;
+        UserDto userDto = new UserDto();
         if (!objects.isEmpty()) {
             for (Object[] obj : objects) {
                 userDto = new UserDto();

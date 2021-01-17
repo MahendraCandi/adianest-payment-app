@@ -1,7 +1,12 @@
 package com.adianest.AdianestPaymentApp.jwt;
 
+import com.adianest.AdianestPaymentApp.model.ResponseMessage;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -19,6 +24,8 @@ import java.util.Date;
 
 // this class to verify client credentials
 public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
+
+    private static final Logger log = LogManager.getLogger(JwtUsernameAndPasswordAuthenticationFilter.class);
 
     private final AuthenticationManager authenticationManager;
     private final JwtConfig jwtConfig;
@@ -43,6 +50,11 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
                                 request.getInputStream(),
                                 UsernameAndPasswordAuthenticationRequest.class);
 
+            if (usernameAndPasswordAuthenticationRequest.getUsername().isEmpty() ||
+                    usernameAndPasswordAuthenticationRequest.getPassword().isEmpty()) {
+                throw new NullPointerException("Username or password is empty");
+            }
+
             Authentication authentication = new UsernamePasswordAuthenticationToken(
                     usernameAndPasswordAuthenticationRequest.getUsername(),
                     usernameAndPasswordAuthenticationRequest.getPassword()
@@ -50,7 +62,7 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
 
             return authenticationManager.authenticate(authentication);
 
-        }catch (IOException e) {
+        }catch (IOException | NullPointerException e) {
             throw  new RuntimeException(e);
         }
     }
@@ -81,6 +93,23 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
                 .write(new ObjectMapper().writeValueAsString(responseBody));
         response.setStatus(HttpServletResponse.SC_OK);
         
+    }
+
+    @Override
+    protected void unsuccessfulAuthentication(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            AuthenticationException failed) throws IOException, ServletException {
+        ResponseMessage rm = new ResponseMessage();
+        rm.setStatus(HttpStatus.FORBIDDEN.value());
+        rm.setMessage(failed.getMessage());
+
+        response.setCharacterEncoding(jwtConfig.getCharacterEncoding());
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        response.getWriter()
+                .write(new ObjectMapper().writeValueAsString(rm));
+        response.setStatus(HttpStatus.FORBIDDEN.value());
+
     }
 
 

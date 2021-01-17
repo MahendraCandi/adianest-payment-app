@@ -10,8 +10,10 @@ import com.adianest.AdianestPaymentApp.service.ISaldo;
 import com.adianest.AdianestPaymentApp.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -51,7 +53,8 @@ public class UserController {
     }
 
     @PostMapping("/insert")
-    public ResponseEntity insertUser (@RequestBody UserDto userDto) {
+    public ResponseEntity insertUser (@RequestBody @Valid UserDto userDto) {
+        System.out.println("1");
         return ResponseEntity.ok(userService.insertUser(userDto));
     }
 

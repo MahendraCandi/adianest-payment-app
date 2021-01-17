@@ -8,13 +8,28 @@ package com.adianest.AdianestPaymentApp.dto;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import org.springframework.lang.Nullable;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserDto {
 
     private String idUser;
+
+    @NotNull
+    @NotEmpty
     private String noTelpon;
+
+    @NotNull
+    @NotEmpty
     private String passwordUser;
+
+    @NotNull
+    @NotEmpty
     private String emailUser;
+
+    @NotNull
+    @NotEmpty
     private String nameUser;
     private Integer idAuthorities;
     private String nameAuthorities;

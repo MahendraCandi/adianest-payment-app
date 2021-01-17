@@ -8,6 +8,7 @@ import com.adianest.AdianestPaymentApp.dto.UserDto;
 import com.adianest.AdianestPaymentApp.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,7 +23,7 @@ public class LoginController {
 
 
     @PostMapping("/signup")
-    public ResponseEntity insertUser (@RequestBody UserDto userDto) {
+    public ResponseEntity insertUser (@Validated @RequestBody UserDto userDto) {
         return ResponseEntity.ok(userService.insertUser(userDto));
     }
 }
