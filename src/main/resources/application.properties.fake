@@ -1,0 +1,25 @@
+#
+# Copyright (c) 2020. <a href="https://github.com/MahendraCandi">MahendraCandi </a>.
+#
+
+server.port=8123
+
+spring.datasource.url=jdbc:mysql://localhost:3306/adianest_payment?useSSL=false
+spring.datasource.username=root
+spring.datasource.password=
+
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL5Dialect
+spring.jpa.hibernate.ddl-auto=none
+spring.jpa.show-sql=true
+
+#logging.level.web=trace
+
+application.jwt.secretKey=securedkey1234securedkey12341234
+application.jwt.tokenHeaderName=auth-token
+application.jwt.expirationDateHeaderName=auth-exp
+application.jwt.expirationDateAfterDays=1
+
+application.user.rootDirectory=user
+application.user.imgDirectoryName=img
+
+application.fcm.key=
